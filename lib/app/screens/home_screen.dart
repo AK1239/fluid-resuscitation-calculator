@@ -74,6 +74,12 @@ class HomeScreen extends StatelessWidget {
                 description: 'Calculate iron sucrose dosing using Ganzoni formula',
                 onTap: () => context.go('/iron-sucrose'),
               ),
+              _CalculatorCard(
+                title: 'Developmental Screening',
+                icon: Icons.psychology,
+                description: 'Screen developmental milestones and flag delays',
+                onTap: () => context.go('/developmental-screening'),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Electrolyte Corrections',
