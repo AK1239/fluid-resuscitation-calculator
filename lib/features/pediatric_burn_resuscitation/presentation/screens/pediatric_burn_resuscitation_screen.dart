@@ -3,19 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:chemical_app/core/widgets/custom_text_field.dart';
 import 'package:chemical_app/core/utils/validators.dart';
-import 'package:chemical_app/features/burn_resuscitation/presentation/providers/burn_resuscitation_providers.dart';
-import 'package:chemical_app/features/burn_resuscitation/presentation/widgets/burn_resuscitation_result_widget.dart';
+import 'package:chemical_app/features/pediatric_burn_resuscitation/presentation/providers/pediatric_burn_resuscitation_providers.dart';
+import 'package:chemical_app/features/pediatric_burn_resuscitation/presentation/widgets/pediatric_burn_resuscitation_result_widget.dart';
 
-class BurnResuscitationScreen extends ConsumerStatefulWidget {
-  const BurnResuscitationScreen({super.key});
+class PediatricBurnResuscitationScreen extends ConsumerStatefulWidget {
+  const PediatricBurnResuscitationScreen({super.key});
 
   @override
-  ConsumerState<BurnResuscitationScreen> createState() =>
-      _BurnResuscitationScreenState();
+  ConsumerState<PediatricBurnResuscitationScreen> createState() =>
+      _PediatricBurnResuscitationScreenState();
 }
 
-class _BurnResuscitationScreenState
-    extends ConsumerState<BurnResuscitationScreen> {
+class _PediatricBurnResuscitationScreenState
+    extends ConsumerState<PediatricBurnResuscitationScreen> {
   late final TextEditingController _ageYearsController;
   late final TextEditingController _weightKgController;
   late final TextEditingController _tbsaPercentController;
@@ -41,9 +41,10 @@ class _BurnResuscitationScreenState
 
   @override
   Widget build(BuildContext context) {
-    final formState = ref.watch(burnResuscitationFormProvider);
-    final result = ref.watch(burnResuscitationResultProvider);
-    final formNotifier = ref.read(burnResuscitationFormProvider.notifier);
+    final formState = ref.watch(pediatricBurnResuscitationFormProvider);
+    final result = ref.watch(pediatricBurnResuscitationResultProvider);
+    final formNotifier =
+        ref.read(pediatricBurnResuscitationFormProvider.notifier);
 
     // Sync controllers with state only if different (to avoid cursor jumping)
     if (_ageYearsController.text != (formState.ageYears ?? '')) {
@@ -62,7 +63,7 @@ class _BurnResuscitationScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Burn Resuscitation'),
+        title: const Text('Pediatric Burn Resuscitation'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/'),
@@ -74,15 +75,15 @@ class _BurnResuscitationScreenState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Parkland Formula',
+              'Parkland Formula + Maintenance Fluids',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
             Text(
-              'Calculate initial fluid resuscitation for burn patients using Parkland formula',
+              'Calculate initial fluid resuscitation for pediatric burn patients using Parkland formula with mandatory maintenance fluids (Holliday-Segar)',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
             const SizedBox(height: 24),
             CustomTextField(
@@ -111,10 +112,10 @@ class _BurnResuscitationScreenState
             ),
             const SizedBox(height: 8),
             Text(
-              'Indication: Adults ≥10-15%, Children ≥10%',
+              'Indication: ≥10% TBSA, or any burn with shock, electrical injury, or inhalation injury',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
             const SizedBox(height: 16),
             CustomTextField(
@@ -147,7 +148,7 @@ class _BurnResuscitationScreenState
             ),
             const SizedBox(height: 24),
             Text(
-              'Urine Output Available',
+              'Electrical Injury',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
@@ -157,19 +158,19 @@ class _BurnResuscitationScreenState
                 ButtonSegment(value: true, label: Text('Yes')),
               ],
               selected: {
-                if (formState.hasUrineOutputAvailable != null)
-                  formState.hasUrineOutputAvailable!,
+                if (formState.hasElectricalInjury != null)
+                  formState.hasElectricalInjury!,
               },
               emptySelectionAllowed: true,
               onSelectionChanged: (Set<bool> selected) {
-                formNotifier.setHasUrineOutputAvailable(selected.firstOrNull);
+                formNotifier.setHasElectricalInjury(selected.firstOrNull);
               },
             ),
             const SizedBox(height: 32),
             if (result != null) ...[
               const Divider(),
               const SizedBox(height: 16),
-              BurnResuscitationResultWidget(result: result),
+              PediatricBurnResuscitationResultWidget(result: result),
             ],
           ],
         ),

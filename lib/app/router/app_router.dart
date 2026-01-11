@@ -14,6 +14,7 @@ import 'package:chemical_app/features/who_growth_assessment/presentation/screens
 import 'package:chemical_app/features/iron_sucrose/presentation/screens/iron_sucrose_screen.dart';
 import 'package:chemical_app/features/developmental_screening/presentation/screens/developmental_screening_screen.dart';
 import 'package:chemical_app/features/burn_resuscitation/presentation/screens/burn_resuscitation_screen.dart';
+import 'package:chemical_app/features/pediatric_burn_resuscitation/presentation/screens/pediatric_burn_resuscitation_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -71,6 +72,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/burn-resuscitation',
       builder: (context, state) => const BurnResuscitationScreen(),
+    ),
+    GoRoute(
+      path: '/pediatric-burn-resuscitation',
+      builder: (context, state) => const PediatricBurnResuscitationScreen(),
     ),
   ],
 );

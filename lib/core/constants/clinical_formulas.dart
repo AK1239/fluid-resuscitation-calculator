@@ -18,6 +18,27 @@ double calculateHourlyMaintenanceRate(double dailyMaintenance) {
   return dailyMaintenance / 24;
 }
 
+/// Calculates maintenance fluids for children using Holliday-Segar method
+/// 0-10 kg → 4 mL/kg/hr
+/// 10-20 kg → 40 mL/hr + 2 mL/kg/hr for each kg >10
+/// >20 kg → 60 mL/hr + 1 mL/kg/hr for each kg >20
+double calculatePediatricMaintenanceFluidsHourly(double weightKg) {
+  if (weightKg <= 0) return 0.0;
+  
+  if (weightKg <= 10) {
+    // 0-10 kg: 4 mL/kg/hr
+    return 4 * weightKg;
+  } else if (weightKg <= 20) {
+    // 10-20 kg: 40 mL/hr + 2 mL/kg/hr for each kg >10
+    final excessKg = weightKg - 10;
+    return 40 + (2 * excessKg);
+  } else {
+    // >20 kg: 60 mL/hr + 1 mL/kg/hr for each kg >20
+    final excessKg = weightKg - 20;
+    return 60 + (1 * excessKg);
+  }
+}
+
 /// Calculates sodium correction
 /// Male: 0.6 × BW × (target − current)
 /// Female: 0.5 × BW × (target − current)
