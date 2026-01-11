@@ -39,6 +39,7 @@ class BloodPressureMaleScreen extends StatelessWidget {
     return RepaintBoundary(
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
+        height: MediaQuery.of(context).size.height * 0.7,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -52,37 +53,42 @@ class BloodPressureMaleScreen extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.contain,
-            width: double.infinity,
-            errorBuilder: (context, error, stackTrace) {
-              debugPrint('Error loading blood pressure chart: $imagePath');
-              debugPrint('Error: $error');
-              return Container(
-                height: 200,
-                color: Colors.grey[200],
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        color: Colors.grey[400],
-                        size: 48,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Unable to load chart',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
+          child: InteractiveViewer(
+            minScale: 0.5,
+            maxScale: 4.0,
+            panEnabled: true,
+            boundaryMargin: const EdgeInsets.all(double.infinity),
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                debugPrint('Error loading blood pressure chart: $imagePath');
+                debugPrint('Error: $error');
+                return Container(
+                  height: 200,
+                  color: Colors.grey[200],
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.grey[400],
+                          size: 48,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        Text(
+                          'Unable to load chart',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
