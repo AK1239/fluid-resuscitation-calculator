@@ -146,3 +146,72 @@ Map<String, double> calculateInsulinDosing({
     'eveningSoluble': eveningSoluble,
   };
 }
+
+/// Obstetric calculation result using Naegele's rule
+class ObstetricCalculation {
+  final DateTime edd;
+  final DateTime step1Add7Days;
+  final DateTime step2Subtract3Months;
+  final DateTime step3Add1Year;
+
+  ObstetricCalculation({
+    required this.edd,
+    required this.step1Add7Days,
+    required this.step2Subtract3Months,
+    required this.step3Add1Year,
+  });
+}
+
+/// Calculates Estimated Date of Delivery (EDD) using Naegele's rule
+/// Formula: EDD = LMP + 7 days − 3 months + 1 year
+ObstetricCalculation calculateEDD(DateTime lmp) {
+  // Step 1: LMP + 7 days
+  final step1Add7Days = lmp.add(const Duration(days: 7));
+
+  // Step 2: Step 1 - 3 months
+  DateTime step2Subtract3Months;
+  if (step1Add7Days.month >= 4) {
+    step2Subtract3Months = DateTime(
+      step1Add7Days.year,
+      step1Add7Days.month - 3,
+      step1Add7Days.day,
+    );
+  } else {
+    // Handle year rollover
+    step2Subtract3Months = DateTime(
+      step1Add7Days.year - 1,
+      step1Add7Days.month + 9, // 12 - 3 = 9
+      step1Add7Days.day,
+    );
+  }
+
+  // Step 3: Step 2 + 1 year (final EDD)
+  final step3Add1Year = DateTime(
+    step2Subtract3Months.year + 1,
+    step2Subtract3Months.month,
+    step2Subtract3Months.day,
+  );
+
+  return ObstetricCalculation(
+    edd: step3Add1Year,
+    step1Add7Days: step1Add7Days,
+    step2Subtract3Months: step2Subtract3Months,
+    step3Add1Year: step3Add1Year,
+  );
+}
+
+/// Calculates gestational age from LMP to today
+/// Returns a map with totalDays, weeks, and days
+Map<String, int> calculateGestationalAge(DateTime lmp, DateTime today) {
+  final difference = today.difference(lmp);
+  final totalDays = difference.inDays;
+
+  final weeks = totalDays ~/ 7;
+  final days = totalDays % 7;
+
+  return {
+    'totalDays': totalDays,
+    'weeks': weeks,
+    'days': days,
+  };
+}

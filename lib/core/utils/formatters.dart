@@ -33,3 +33,30 @@ String formatPercent(double percent) {
   return '${formatNumber(percent, decimals: 1)}%';
 }
 
+/// Formats date as DD/MM/YYYY
+String formatDate(DateTime date) {
+  final day = date.day.toString().padLeft(2, '0');
+  final month = date.month.toString().padLeft(2, '0');
+  final year = date.year.toString();
+  return '$day/$month/$year';
+}
+
+/// Formats date with month name (e.g., "17 May 2026")
+String formatDateWithMonthName(DateTime date) {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+  return '${date.day} ${months[date.month - 1]} ${date.year}';
+}
+

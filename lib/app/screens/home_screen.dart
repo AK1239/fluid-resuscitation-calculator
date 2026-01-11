@@ -39,6 +39,12 @@ class HomeScreen extends StatelessWidget {
                 description: 'Calculate insulin dosing using 2/3-1/3 rule',
                 onTap: () => context.go('/insulin-dosing'),
               ),
+              _CalculatorCard(
+                title: 'Obstetric Calculator',
+                icon: Icons.child_care,
+                description: 'Calculate EDD using Naegele\'s rule and gestational age',
+                onTap: () => context.go('/obstetric-calculator'),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Electrolyte Corrections',

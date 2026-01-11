@@ -142,3 +142,42 @@ String? validateTargetLess({
   }
   return null;
 }
+
+/// Validates date input in DD/MM/YYYY format
+String? validateDate(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Date is required';
+  }
+  
+  final parts = value.split('/');
+  if (parts.length != 3) {
+    return 'Please enter date in DD/MM/YYYY format';
+  }
+
+  final day = int.tryParse(parts[0]);
+  final month = int.tryParse(parts[1]);
+  final year = int.tryParse(parts[2]);
+
+  if (day == null || month == null || year == null) {
+    return 'Please enter valid numbers';
+  }
+  
+  if (month < 1 || month > 12) {
+    return 'Month must be between 1 and 12';
+  }
+  
+  if (day < 1 || day > 31) {
+    return 'Day must be between 1 and 31';
+  }
+  
+  if (year < 1900 || year > 2100) {
+    return 'Year must be between 1900 and 2100';
+  }
+
+  try {
+    DateTime(year, month, day);
+    return null;
+  } catch (e) {
+    return 'Invalid date';
+  }
+}

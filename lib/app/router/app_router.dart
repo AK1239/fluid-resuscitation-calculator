@@ -9,22 +9,17 @@ import 'package:chemical_app/features/electrolytes/potassium/presentation/screen
 import 'package:chemical_app/features/electrolytes/magnesium/presentation/screens/magnesium_correction_screen.dart';
 import 'package:chemical_app/features/electrolytes/calcium/presentation/screens/calcium_correction_screen.dart';
 import 'package:chemical_app/features/insulin_dosing/presentation/screens/insulin_dosing_screen.dart';
+import 'package:chemical_app/features/obstetric_calculator/presentation/screens/obstetric_calculator_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
   routes: [
-    GoRoute(
-      path: '/splash',
-      builder: (context, state) => const SplashScreen(),
-    ),
+    GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
     GoRoute(
       path: '/disclaimer',
       builder: (context, state) => const DisclaimerScreen(),
     ),
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
     GoRoute(
       path: '/fluid-resuscitation',
       builder: (context, state) => const FluidResuscitationScreen(),
@@ -53,6 +48,9 @@ final appRouter = GoRouter(
       path: '/insulin-dosing',
       builder: (context, state) => const InsulinDosingScreen(),
     ),
+    GoRoute(
+      path: '/obstetric-calculator',
+      builder: (context, state) => const ObstetricCalculatorScreen(),
+    ),
   ],
 );
-
