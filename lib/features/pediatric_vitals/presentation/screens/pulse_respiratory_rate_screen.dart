@@ -20,6 +20,7 @@ class PulseRespiratoryRateScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: RepaintBoundary(
             child: Container(
+              height: MediaQuery.of(context).size.height * 0.8,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
