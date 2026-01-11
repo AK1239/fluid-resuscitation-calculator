@@ -91,6 +91,13 @@ class HomeScreen extends StatelessWidget {
                     'Calculate fluid resuscitation using Parkland formula',
                 onTap: () => context.go('/burn-resuscitation'),
               ),
+              _CalculatorCard(
+                title: 'Pediatric Vitals',
+                icon: Icons.favorite,
+                description:
+                    'View pediatric vital signs reference charts (blood pressure, pulse rate, respiratory rate)',
+                onTap: () => context.go('/pediatric-vitals'),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Electrolyte Corrections',

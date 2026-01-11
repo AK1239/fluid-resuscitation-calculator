@@ -34,9 +34,7 @@ class _WhoGrowthAssessmentScreenState
       body: Column(
         children: [
           _buildFilterSection(context, charts, filterState, filterNotifier),
-          Expanded(
-            child: _buildBody(context, filteredCharts),
-          ),
+          Expanded(child: _buildBody(context, filteredCharts)),
         ],
       ),
     );
@@ -94,19 +92,19 @@ class _WhoGrowthAssessmentScreenState
         value: null,
         child: Text('All Categories'),
       ),
-      ...categories.map((category) => DropdownMenuItem<String>(
-            value: category.name,
-            child: Text(category.displayName),
-          )),
+      ...categories.map(
+        (category) => DropdownMenuItem<String>(
+          value: category.name,
+          child: Text(category.displayName),
+        ),
+      ),
     ];
 
     return DropdownButtonFormField<String?>(
       value: selectedCategory,
       decoration: InputDecoration(
         labelText: 'Category',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 16,
@@ -127,27 +125,16 @@ class _WhoGrowthAssessmentScreenState
       value: selectedGender,
       decoration: InputDecoration(
         labelText: 'Gender',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 16,
         ),
       ),
       items: const [
-        DropdownMenuItem<String>(
-          value: null,
-          child: Text('All'),
-        ),
-        DropdownMenuItem<String>(
-          value: 'boys',
-          child: Text('Boys'),
-        ),
-        DropdownMenuItem<String>(
-          value: 'girls',
-          child: Text('Girls'),
-        ),
+        DropdownMenuItem<String>(value: null, child: Text('All')),
+        DropdownMenuItem<String>(value: 'boys', child: Text('Boys')),
+        DropdownMenuItem<String>(value: 'girls', child: Text('Girls')),
       ],
       onChanged: onChanged,
       isExpanded: true,
@@ -171,8 +158,7 @@ class _WhoGrowthAssessmentScreenState
       }
 
       // Filter by gender - only include if category has charts for selected gender
-      if (filterState.selectedGender == 'boys' &&
-          category.boysCharts.isEmpty) {
+      if (filterState.selectedGender == 'boys' && category.boysCharts.isEmpty) {
         return false;
       }
       if (filterState.selectedGender == 'girls' &&
@@ -219,10 +205,12 @@ class _WhoGrowthAssessmentScreenState
     int count = 0;
     for (final category in charts) {
       count++; // Category header
-      
-      final showBoys = filterState.selectedGender == null ||
+
+      final showBoys =
+          filterState.selectedGender == null ||
           filterState.selectedGender == 'boys';
-      final showGirls = filterState.selectedGender == null ||
+      final showGirls =
+          filterState.selectedGender == null ||
           filterState.selectedGender == 'girls';
 
       if (showBoys && category.boysCharts.isNotEmpty) {
@@ -247,9 +235,11 @@ class _WhoGrowthAssessmentScreenState
     final totalContentItems = _calculateItemCount(charts, filterState) - 2;
 
     final showBoys =
-        filterState.selectedGender == null || filterState.selectedGender == 'boys';
+        filterState.selectedGender == null ||
+        filterState.selectedGender == 'boys';
     final showGirls =
-        filterState.selectedGender == null || filterState.selectedGender == 'girls';
+        filterState.selectedGender == null ||
+        filterState.selectedGender == 'girls';
 
     // Content items
     for (final category in charts) {

@@ -16,6 +16,12 @@ import 'package:chemical_app/features/developmental_screening/presentation/scree
 import 'package:chemical_app/features/burn_resuscitation/presentation/screens/burn_resuscitation_screen.dart';
 import 'package:chemical_app/features/burn_resuscitation/presentation/screens/burn_resuscitation_selection_screen.dart';
 import 'package:chemical_app/features/pediatric_burn_resuscitation/presentation/screens/pediatric_burn_resuscitation_screen.dart';
+import 'package:chemical_app/features/pediatric_vitals/presentation/screens/pediatric_vitals_selection_screen.dart';
+import 'package:chemical_app/features/pediatric_vitals/presentation/screens/pulse_respiratory_rate_screen.dart';
+import 'package:chemical_app/features/pediatric_vitals/presentation/screens/blood_pressure_selection_screen.dart';
+import 'package:chemical_app/features/pediatric_vitals/presentation/screens/blood_pressure_male_screen.dart';
+import 'package:chemical_app/features/pediatric_vitals/presentation/screens/blood_pressure_female_screen.dart';
+import 'package:chemical_app/features/pediatric_vitals/presentation/screens/blood_pressure_interpretation_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -81,6 +87,30 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/burn-resuscitation/pediatric',
       builder: (context, state) => const PediatricBurnResuscitationScreen(),
+    ),
+    GoRoute(
+      path: '/pediatric-vitals',
+      builder: (context, state) => const PediatricVitalsSelectionScreen(),
+    ),
+    GoRoute(
+      path: '/pediatric-vitals/pulse-respiratory-rate',
+      builder: (context, state) => const PulseRespiratoryRateScreen(),
+    ),
+    GoRoute(
+      path: '/pediatric-vitals/blood-pressure',
+      builder: (context, state) => const BloodPressureSelectionScreen(),
+    ),
+    GoRoute(
+      path: '/pediatric-vitals/blood-pressure/male',
+      builder: (context, state) => const BloodPressureMaleScreen(),
+    ),
+    GoRoute(
+      path: '/pediatric-vitals/blood-pressure/female',
+      builder: (context, state) => const BloodPressureFemaleScreen(),
+    ),
+    GoRoute(
+      path: '/pediatric-vitals/blood-pressure/interpretation',
+      builder: (context, state) => const BloodPressureInterpretationScreen(),
     ),
   ],
 );
