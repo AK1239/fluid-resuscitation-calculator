@@ -101,7 +101,7 @@ class _WhoGrowthAssessmentScreenState
     ];
 
     return DropdownButtonFormField<String?>(
-      value: selectedCategory,
+      initialValue: selectedCategory,
       decoration: InputDecoration(
         labelText: 'Category',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
@@ -122,7 +122,7 @@ class _WhoGrowthAssessmentScreenState
     ValueChanged<String?> onChanged,
   ) {
     return DropdownButtonFormField<String?>(
-      value: selectedGender,
+      initialValue: selectedGender,
       decoration: InputDecoration(
         labelText: 'Gender',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
@@ -187,8 +187,6 @@ class _WhoGrowthAssessmentScreenState
           return _buildGenderSubheader(context, item.gender);
         } else if (item is _ChartImageItem) {
           return _buildChartImage(context, item.chart);
-        } else if (item is _PdfButtonItem) {
-          return _buildPdfButton(context);
         } else if (item is _FooterItem) {
           return _buildFooter(context);
         }
@@ -222,7 +220,7 @@ class _WhoGrowthAssessmentScreenState
         count += category.girlsCharts.length; // Girls charts
       }
     }
-    count += 2; // PDF button and footer
+    count += 1; // Footer
     return count;
   }
 
@@ -232,7 +230,7 @@ class _WhoGrowthAssessmentScreenState
     ChartFilterState filterState,
   ) {
     int currentIndex = 0;
-    final totalContentItems = _calculateItemCount(charts, filterState) - 2;
+    final totalContentItems = _calculateItemCount(charts, filterState) - 1;
 
     final showBoys =
         filterState.selectedGender == null ||
@@ -280,11 +278,8 @@ class _WhoGrowthAssessmentScreenState
       }
     }
 
-    // PDF button and footer
+    // Footer
     if (index == totalContentItems) {
-      return _PdfButtonItem();
-    }
-    if (index == totalContentItems + 1) {
       return _FooterItem();
     }
 
@@ -380,27 +375,6 @@ class _WhoGrowthAssessmentScreenState
     );
   }
 
-  Widget _buildPdfButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-      child: ElevatedButton.icon(
-        onPressed: () {
-          // TODO: Navigate to PDF viewer screen
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('PDF viewer functionality coming soon'),
-            ),
-          );
-        },
-        icon: const Icon(Icons.picture_as_pdf),
-        label: const Text('View official WHO PDF'),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        ),
-      ),
-    );
-  }
-
   Widget _buildFooter(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
@@ -433,7 +407,5 @@ class _ChartImageItem extends _ListItemType {
   final WhoGrowthChart chart;
   _ChartImageItem(this.chart);
 }
-
-class _PdfButtonItem extends _ListItemType {}
 
 class _FooterItem extends _ListItemType {}

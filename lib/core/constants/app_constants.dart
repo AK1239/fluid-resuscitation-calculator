@@ -6,7 +6,7 @@ class AppConstants {
       'This app is for educational use only and does not replace clinical judgment.';
 
   // App name
-  static const String appName = 'Fluid Resuscitation Calculator';
+  static const String appName = 'Med Calculator';
 
   // SharedPreferences keys
   static const String disclaimerAcceptedKey = 'disclaimer_accepted';

@@ -1,4 +1,4 @@
-package com.example.chemical_app
+package tz.medtutor.fluidcalculator
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,5 @@
 name: chemical_app
-description: "A new Flutter project."
+description: "Medical calculator app for fluid resuscitation, electrolyte corrections, and pediatric assessments. Designed for medical students, interns, and healthcare professionals."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
