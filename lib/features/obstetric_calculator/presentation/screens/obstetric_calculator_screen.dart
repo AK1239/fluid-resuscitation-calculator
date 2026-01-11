@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:chemical_app/core/widgets/custom_text_field.dart';
-import 'package:chemical_app/core/utils/validators.dart';
+import 'package:chemical_app/core/utils/formatters.dart';
 import 'package:chemical_app/features/obstetric_calculator/presentation/providers/obstetric_providers.dart';
 import 'package:chemical_app/features/obstetric_calculator/presentation/widgets/obstetric_result_widget.dart';
 
@@ -16,28 +15,7 @@ class ObstetricCalculatorScreen extends ConsumerStatefulWidget {
 
 class _ObstetricCalculatorScreenState
     extends ConsumerState<ObstetricCalculatorScreen> {
-  late final TextEditingController _lmpController;
-  late final TextEditingController _todayController;
-  bool _initialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _lmpController = TextEditingController();
-    _todayController = TextEditingController();
-    
-    // Set today's date as default
-    final today = DateTime.now();
-    final todayStr = '${today.day.toString().padLeft(2, '0')}/${today.month.toString().padLeft(2, '0')}/${today.year}';
-    _todayController.text = todayStr;
-  }
-
-  @override
-  void dispose() {
-    _lmpController.dispose();
-    _todayController.dispose();
-    super.dispose();
-  }
+  DateTime? _selectedLmp;
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +23,35 @@ class _ObstetricCalculatorScreenState
     final result = ref.watch(obstetricResultProvider);
     final formNotifier = ref.read(obstetricFormProvider.notifier);
 
-    // Initialize today's date in form state if not already set
-    if (!_initialized) {
-      _initialized = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_todayController.text.isNotEmpty && formState.today == null) {
-          formNotifier.setToday(_todayController.text);
-        }
-      });
+    // Sync selected date with form state
+    if (_selectedLmp != formState.lmp) {
+      _selectedLmp = formState.lmp;
     }
 
-    // Sync controllers with state only if different (to avoid cursor jumping)
-    if (_lmpController.text != (formState.lmp ?? '')) {
-      _lmpController.text = formState.lmp ?? '';
-    }
-    if (_todayController.text != (formState.today ?? '')) {
-      _todayController.text = formState.today ?? '';
+    Future<void> selectDate(BuildContext context) async {
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _selectedLmp ?? DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now(),
+        helpText: 'Select Last Menstrual Period',
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+      if (picked != null) {
+        setState(() {
+          _selectedLmp = picked;
+        });
+        formNotifier.setLmp(picked);
+      }
     }
 
     return Scaffold(
@@ -84,29 +75,65 @@ class _ObstetricCalculatorScreenState
             Text(
               'Calculate Estimated Date of Delivery (EDD) using Naegele\'s rule and current Gestational Age (GA)',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 24),
-            CustomTextField(
-              label: 'Last Menstrual Period (LMP)',
-              unit: 'DD/MM/YYYY',
-              controller: _lmpController,
-              validator: validateDate,
-              onChanged: (value) => formNotifier.setLmp(value),
-              hintText: '10/08/2025',
-              keyboardType: TextInputType.datetime,
+            // LMP Date Picker Field
+            Text(
+              'Last Menstrual Period (LMP)',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Today\'s Date',
-              unit: 'DD/MM/YYYY',
-              controller: _todayController,
-              validator: validateDate,
-              onChanged: (value) => formNotifier.setToday(value),
-              hintText: '11/01/2026',
-              keyboardType: TextInputType.datetime,
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: () => selectDate(context),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  hintText: 'Tap to select date',
+                  suffixIcon: const Icon(Icons.calendar_today),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _selectedLmp != null
+                          ? formatDate(_selectedLmp!)
+                          : 'Select LMP date',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: _selectedLmp != null
+                            ? Theme.of(context).colorScheme.onSurface
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
+            if (formState.lmp != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Today\'s date is automatically used for calculation',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
             const SizedBox(height: 32),
             if (result != null) ...[
               const Divider(),
