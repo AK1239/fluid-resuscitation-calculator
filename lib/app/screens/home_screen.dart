@@ -80,6 +80,12 @@ class HomeScreen extends StatelessWidget {
                 description: 'Screen developmental milestones and flag delays',
                 onTap: () => context.go('/developmental-screening'),
               ),
+              _CalculatorCard(
+                title: 'Burn Resuscitation',
+                icon: Icons.local_fire_department,
+                description: 'Calculate fluid resuscitation using Parkland formula',
+                onTap: () => context.go('/burn-resuscitation'),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Electrolyte Corrections',

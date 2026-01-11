@@ -13,6 +13,7 @@ import 'package:chemical_app/features/obstetric_calculator/presentation/screens/
 import 'package:chemical_app/features/who_growth_assessment/presentation/screens/who_growth_assessment_screen.dart';
 import 'package:chemical_app/features/iron_sucrose/presentation/screens/iron_sucrose_screen.dart';
 import 'package:chemical_app/features/developmental_screening/presentation/screens/developmental_screening_screen.dart';
+import 'package:chemical_app/features/burn_resuscitation/presentation/screens/burn_resuscitation_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -66,6 +67,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/developmental-screening',
       builder: (context, state) => const DevelopmentalScreeningScreen(),
+    ),
+    GoRoute(
+      path: '/burn-resuscitation',
+      builder: (context, state) => const BurnResuscitationScreen(),
     ),
   ],
 );

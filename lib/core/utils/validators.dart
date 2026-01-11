@@ -233,6 +233,60 @@ String? validateZScore(String? value) {
   return null;
 }
 
+/// Validates TBSA percentage
+String? validateTbsaPercent(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'TBSA % is required';
+  }
+  final tbsa = double.tryParse(value);
+  if (tbsa == null) {
+    return 'Please enter a valid number';
+  }
+  if (tbsa <= 0) {
+    return 'TBSA must be greater than 0';
+  }
+  if (tbsa > 100) {
+    return 'TBSA cannot exceed 100%';
+  }
+  return null;
+}
+
+/// Validates time in hours
+String? validateTimeHours(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Time is required';
+  }
+  final time = int.tryParse(value);
+  if (time == null) {
+    return 'Please enter a valid number';
+  }
+  if (time < 0) {
+    return 'Time cannot be negative';
+  }
+  if (time > 48) {
+    return 'Time seems unrealistic (max 48 hours)';
+  }
+  return null;
+}
+
+/// Validates age in years
+String? validateAgeYears(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Age is required';
+  }
+  final age = int.tryParse(value);
+  if (age == null) {
+    return 'Please enter a valid number';
+  }
+  if (age < 0) {
+    return 'Age cannot be negative';
+  }
+  if (age > 120) {
+    return 'Age seems unrealistic (max 120 years)';
+  }
+  return null;
+}
+
 /// Validates hemoglobin level (Hb)
 String? validateHemoglobin(String? value) {
   if (value == null || value.isEmpty) {
