@@ -4,12 +4,24 @@ import 'package:go_router/go_router.dart';
 import 'package:chemical_app/features/who_growth_assessment/presentation/providers/who_growth_charts_providers.dart';
 import 'package:chemical_app/features/who_growth_assessment/domain/entities/who_growth_chart.dart';
 
-class WhoGrowthAssessmentScreen extends ConsumerWidget {
+class WhoGrowthAssessmentScreen extends ConsumerStatefulWidget {
   const WhoGrowthAssessmentScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WhoGrowthAssessmentScreen> createState() =>
+      _WhoGrowthAssessmentScreenState();
+}
+
+class _WhoGrowthAssessmentScreenState
+    extends ConsumerState<WhoGrowthAssessmentScreen> {
+  @override
+  Widget build(BuildContext context) {
     final charts = ref.watch(whoGrowthChartsProvider);
+    final filterState = ref.watch(chartFilterProvider);
+    final filterNotifier = ref.read(chartFilterProvider.notifier);
+
+    // Filter charts based on selection
+    final filteredCharts = _filterCharts(charts, filterState);
 
     return Scaffold(
       appBar: AppBar(
@@ -19,16 +31,166 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
           onPressed: () => context.go('/'),
         ),
       ),
-      body: _buildBody(context, charts),
+      body: Column(
+        children: [
+          _buildFilterSection(context, charts, filterState, filterNotifier),
+          Expanded(
+            child: _buildBody(context, filteredCharts),
+          ),
+        ],
+      ),
     );
   }
 
+  Widget _buildFilterSection(
+    BuildContext context,
+    List<WhoGrowthChartCategory> allCharts,
+    ChartFilterState filterState,
+    ChartFilterNotifier filterNotifier,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildCategoryDropdown(
+              context,
+              allCharts,
+              filterState.selectedCategory,
+              (value) => filterNotifier.setCategory(value),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _buildGenderDropdown(
+              context,
+              filterState.selectedGender,
+              (value) => filterNotifier.setGender(value),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryDropdown(
+    BuildContext context,
+    List<WhoGrowthChartCategory> categories,
+    String? selectedCategory,
+    ValueChanged<String?> onChanged,
+  ) {
+    final items = <DropdownMenuItem<String>>[
+      const DropdownMenuItem<String>(
+        value: null,
+        child: Text('All Categories'),
+      ),
+      ...categories.map((category) => DropdownMenuItem<String>(
+            value: category.name,
+            child: Text(category.displayName),
+          )),
+    ];
+
+    return DropdownButtonFormField<String?>(
+      value: selectedCategory,
+      decoration: InputDecoration(
+        labelText: 'Category',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 16,
+        ),
+      ),
+      items: items,
+      onChanged: onChanged,
+      isExpanded: true,
+    );
+  }
+
+  Widget _buildGenderDropdown(
+    BuildContext context,
+    String? selectedGender,
+    ValueChanged<String?> onChanged,
+  ) {
+    return DropdownButtonFormField<String?>(
+      value: selectedGender,
+      decoration: InputDecoration(
+        labelText: 'Gender',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 16,
+        ),
+      ),
+      items: const [
+        DropdownMenuItem<String>(
+          value: null,
+          child: Text('All'),
+        ),
+        DropdownMenuItem<String>(
+          value: 'boys',
+          child: Text('Boys'),
+        ),
+        DropdownMenuItem<String>(
+          value: 'girls',
+          child: Text('Girls'),
+        ),
+      ],
+      onChanged: onChanged,
+      isExpanded: true,
+    );
+  }
+
+  List<WhoGrowthChartCategory> _filterCharts(
+    List<WhoGrowthChartCategory> charts,
+    ChartFilterState filterState,
+  ) {
+    if (filterState.selectedCategory == null &&
+        filterState.selectedGender == null) {
+      return charts;
+    }
+
+    return charts.where((category) {
+      // Filter by category
+      if (filterState.selectedCategory != null &&
+          category.name != filterState.selectedCategory) {
+        return false;
+      }
+
+      // Filter by gender - only include if category has charts for selected gender
+      if (filterState.selectedGender == 'boys' &&
+          category.boysCharts.isEmpty) {
+        return false;
+      }
+      if (filterState.selectedGender == 'girls' &&
+          category.girlsCharts.isEmpty) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+  }
+
   Widget _buildBody(BuildContext context, List<WhoGrowthChartCategory> charts) {
+    final filterState = ref.watch(chartFilterProvider);
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: _calculateItemCount(charts),
+      itemCount: _calculateItemCount(charts, filterState),
       itemBuilder: (context, index) {
-        final item = _getItemAtIndex(index, charts);
+        final item = _getItemAtIndex(index, charts, filterState);
         if (item == null) {
           return const SizedBox.shrink();
         }
@@ -50,15 +212,24 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
     );
   }
 
-  int _calculateItemCount(List<WhoGrowthChartCategory> charts) {
+  int _calculateItemCount(
+    List<WhoGrowthChartCategory> charts,
+    ChartFilterState filterState,
+  ) {
     int count = 0;
     for (final category in charts) {
       count++; // Category header
-      if (category.boysCharts.isNotEmpty) {
+      
+      final showBoys = filterState.selectedGender == null ||
+          filterState.selectedGender == 'boys';
+      final showGirls = filterState.selectedGender == null ||
+          filterState.selectedGender == 'girls';
+
+      if (showBoys && category.boysCharts.isNotEmpty) {
         count++; // Boys header
         count += category.boysCharts.length; // Boys charts
       }
-      if (category.girlsCharts.isNotEmpty) {
+      if (showGirls && category.girlsCharts.isNotEmpty) {
         count++; // Girls header
         count += category.girlsCharts.length; // Girls charts
       }
@@ -70,9 +241,15 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
   _ListItemType? _getItemAtIndex(
     int index,
     List<WhoGrowthChartCategory> charts,
+    ChartFilterState filterState,
   ) {
     int currentIndex = 0;
-    final totalContentItems = _calculateItemCount(charts) - 2;
+    final totalContentItems = _calculateItemCount(charts, filterState) - 2;
+
+    final showBoys =
+        filterState.selectedGender == null || filterState.selectedGender == 'boys';
+    final showGirls =
+        filterState.selectedGender == null || filterState.selectedGender == 'girls';
 
     // Content items
     for (final category in charts) {
@@ -83,7 +260,7 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
       currentIndex++;
 
       // Boys section
-      if (category.boysCharts.isNotEmpty) {
+      if (showBoys && category.boysCharts.isNotEmpty) {
         if (currentIndex == index) {
           return _GenderSubheaderItem('Boys');
         }
@@ -98,7 +275,7 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
       }
 
       // Girls section
-      if (category.girlsCharts.isNotEmpty) {
+      if (showGirls && category.girlsCharts.isNotEmpty) {
         if (currentIndex == index) {
           return _GenderSubheaderItem('Girls');
         }

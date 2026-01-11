@@ -14,3 +14,46 @@ final whoGrowthChartsProvider =
   final repository = ref.watch(whoGrowthChartsRepositoryProvider);
   return repository.getCharts();
 });
+
+/// Filter state
+class ChartFilterState {
+  final String? selectedCategory; // null means "All"
+  final String? selectedGender; // null means "All", 'boys' or 'girls'
+
+  const ChartFilterState({
+    this.selectedCategory,
+    this.selectedGender,
+  });
+
+  ChartFilterState copyWith({
+    String? selectedCategory,
+    String? selectedGender,
+  }) {
+    return ChartFilterState(
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+      selectedGender: selectedGender ?? this.selectedGender,
+    );
+  }
+}
+
+/// Filter state notifier
+class ChartFilterNotifier extends StateNotifier<ChartFilterState> {
+  ChartFilterNotifier() : super(const ChartFilterState());
+
+  void setCategory(String? category) {
+    state = state.copyWith(selectedCategory: category);
+  }
+
+  void setGender(String? gender) {
+    state = state.copyWith(selectedGender: gender);
+  }
+
+  void reset() {
+    state = const ChartFilterState();
+  }
+}
+
+final chartFilterProvider =
+    StateNotifierProvider<ChartFilterNotifier, ChartFilterState>((ref) {
+  return ChartFilterNotifier();
+});
