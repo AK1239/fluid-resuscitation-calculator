@@ -126,11 +126,29 @@ class BurnResuscitationResultWidget extends StatelessWidget {
                 isHighlighted: true,
               ),
               if (result.timeSinceBurnHours < 8) ...[
-                ResultRow(
-                  label: 'First 8 hours',
-                  value:
-                      '${formatNumber(result.first8hVolume, decimals: 0)} mL (${formatNumber(result.first8hHourlyRate, decimals: 0)} mL/hr for next ${result.first8hRemainingHours} hours)',
-                  isHighlighted: false,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          'First 8 hours',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          '${formatNumber(result.first8hVolume, decimals: 0)} mL (${formatNumber(result.first8hHourlyRate, decimals: 0)} mL/hr for next ${result.first8hRemainingHours} hours)',
+                          textAlign: TextAlign.right,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
               ResultRow(

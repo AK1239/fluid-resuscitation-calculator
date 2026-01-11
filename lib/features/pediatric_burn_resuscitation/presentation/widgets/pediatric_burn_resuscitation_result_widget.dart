@@ -6,8 +6,10 @@ import 'package:chemical_app/features/pediatric_burn_resuscitation/domain/entiti
 class PediatricBurnResuscitationResultWidget extends StatelessWidget {
   final PediatricBurnResuscitationResult result;
 
-  const PediatricBurnResuscitationResultWidget(
-      {super.key, required this.result});
+  const PediatricBurnResuscitationResultWidget({
+    super.key,
+    required this.result,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +24,9 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
             child: Text(
               'Patient may not meet formal indication for fluid resuscitation (≥10% TBSA, or any burn with shock, electrical injury, or inhalation injury). Consider clinical judgment.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.orange.shade900,
-                    fontWeight: FontWeight.w500,
-                  ),
+                color: Colors.orange.shade900,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         if (!result.meetsIndication) const SizedBox(height: 16),
@@ -52,18 +54,17 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primaryContainer
-                      .withValues(alpha: 0.3),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   '✓ Total burn fluid = ${formatNumber(result.totalBurnFluid24h, decimals: 0)} mL RL over 24 hours',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
             ],
@@ -78,8 +79,10 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
             children: [
               ResultRow(
                 label: 'Maintenance fluid rate',
-                value:
-                    formatNumber(result.maintenanceFluidHourlyRate, decimals: 1),
+                value: formatNumber(
+                  result.maintenanceFluidHourlyRate,
+                  decimals: 1,
+                ),
                 unit: 'mL/hr',
                 isHighlighted: true,
               ),
@@ -87,16 +90,16 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
               Text(
                 'Fluid type: D5 0.45% NS or D5 RL (institution-dependent)',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontStyle: FontStyle.italic,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Maintenance runs continuously over 24 hours',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
@@ -152,23 +155,28 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
         // Total Hourly Rates
         ResultCard(
           title: 'Total Hourly Fluid Rates',
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.2),
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.primaryContainer.withValues(alpha: 0.2),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Total hourly rate = Burn resuscitation rate + Maintenance rate',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
               const SizedBox(height: 16),
               if (result.timeSinceBurnHours < 8) ...[
                 ResultRow(
-                  label: 'First 8 hours (next ${result.first8hRemainingHours} hours)',
-                  value:
-                      formatNumber(result.first8hTotalHourlyRate, decimals: 1),
+                  label:
+                      'First 8 hours (next ${result.first8hRemainingHours} hours)',
+                  value: formatNumber(
+                    result.first8hTotalHourlyRate,
+                    decimals: 1,
+                  ),
                   unit: 'mL/hr',
                   isHighlighted: true,
                 ),
@@ -215,11 +223,29 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
                 isHighlighted: true,
               ),
               if (result.timeSinceBurnHours < 8) ...[
-                ResultRow(
-                  label: 'First 8 h',
-                  value:
-                      '${formatNumber(result.first8hVolume, decimals: 0)} mL (${formatNumber(result.first8hTotalHourlyRate, decimals: 0)} mL/hr for next ${result.first8hRemainingHours} h)',
-                  isHighlighted: false,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          'First 8 h',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          '${formatNumber(result.first8hVolume, decimals: 0)} mL (${formatNumber(result.first8hTotalHourlyRate, decimals: 0)} mL/hr for next ${result.first8hRemainingHours} h)',
+                          textAlign: TextAlign.right,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
               ResultRow(
@@ -248,16 +274,17 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
         // Clinical Monitoring Reminders
         ResultCard(
           title: 'Clinical Monitoring Reminders',
-          backgroundColor:
-              Theme.of(context).colorScheme.surfaceContainerHighest,
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.surfaceContainerHighest,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 '• Adjust fluids hourly based on urine output and perfusion',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               Text(
@@ -269,9 +296,9 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
                 Text(
                   '• Inhalation injury present - may require increased fluids (clinical judgment)',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.orange.shade900,
-                      ),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.orange.shade900,
+                  ),
                 ),
               ],
               if (result.hasElectricalInjury) ...[
@@ -279,9 +306,9 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
                 Text(
                   '• Electrical burn - maintain higher urine output target (≥1.5 mL/kg/hr)',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.orange.shade900,
-                      ),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.orange.shade900,
+                  ),
                 ),
               ],
             ],
@@ -291,16 +318,17 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
         // Safety Note
         ResultCard(
           title: 'Safety Warnings',
-          backgroundColor:
-              Theme.of(context).colorScheme.surfaceContainerHighest,
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.surfaceContainerHighest,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 '• Parkland is a starting estimate, not a fixed prescription',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               Text(
@@ -311,9 +339,9 @@ class PediatricBurnResuscitationResultWidget extends StatelessWidget {
               Text(
                 '• Children are at risk of hypoglycemia → maintenance fluids are essential',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.orange.shade900,
-                    ),
+                  fontWeight: FontWeight.w500,
+                  color: Colors.orange.shade900,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
