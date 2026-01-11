@@ -232,3 +232,21 @@ String? validateZScore(String? value) {
   }
   return null;
 }
+
+/// Validates hemoglobin level (Hb)
+String? validateHemoglobin(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Hemoglobin is required';
+  }
+  final hb = double.tryParse(value);
+  if (hb == null) {
+    return 'Please enter a valid number';
+  }
+  if (hb <= 0) {
+    return 'Hemoglobin must be greater than 0';
+  }
+  if (hb > 20) {
+    return 'Hemoglobin seems out of range (max 20 g/dL)';
+  }
+  return null;
+}

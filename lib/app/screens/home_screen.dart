@@ -51,6 +51,12 @@ class HomeScreen extends StatelessWidget {
                 description: 'Assess nutritional status using WHO Z-scores (0-59 months)',
                 onTap: () => context.go('/who-growth-assessment'),
               ),
+              _CalculatorCard(
+                title: 'Iron Sucrose (IV)',
+                icon: Icons.healing,
+                description: 'Calculate iron sucrose dosing using Ganzoni formula',
+                onTap: () => context.go('/iron-sucrose'),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Electrolyte Corrections',
