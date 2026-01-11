@@ -6,10 +6,7 @@ import 'package:chemical_app/features/electrolytes/sodium/domain/entities/sodium
 class SodiumResultWidget extends StatelessWidget {
   final SodiumCorrectionResult result;
 
-  const SodiumResultWidget({
-    super.key,
-    required this.result,
-  });
+  const SodiumResultWidget({super.key, required this.result});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +23,7 @@ class SodiumResultWidget extends StatelessWidget {
                 isHighlighted: true,
               ),
               ResultRow(
-                label: 'Volume of 3% NS',
+                label: 'Volume of 3% Saline',
                 value: formatInteger(result.volumeOf3PercentNS),
                 unit: 'mL',
                 isHighlighted: true,
@@ -38,4 +35,3 @@ class SodiumResultWidget extends StatelessWidget {
     );
   }
 }
-

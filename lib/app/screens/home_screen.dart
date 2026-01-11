@@ -14,15 +14,15 @@ class HomeScreen extends StatelessWidget {
             Text(
               'Dr. Yasin Khatri',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             Text(
               '@med.tutor.tz',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.white),
             ),
           ],
         ),
@@ -47,7 +47,8 @@ class HomeScreen extends StatelessWidget {
               _CalculatorCard(
                 title: 'Maintenance Fluids',
                 icon: Icons.medical_services,
-                description: 'Calculate daily and hourly maintenance fluid rates',
+                description:
+                    'Calculate daily and hourly maintenance fluid rates',
                 onTap: () => context.go('/maintenance-fluids'),
               ),
               _CalculatorCard(
@@ -59,19 +60,22 @@ class HomeScreen extends StatelessWidget {
               _CalculatorCard(
                 title: 'Obstetric Calculator',
                 icon: Icons.child_care,
-                description: 'Calculate EDD using Naegele\'s rule and gestational age',
+                description:
+                    'Calculate EDD using Naegele\'s rule and gestational age',
                 onTap: () => context.go('/obstetric-calculator'),
               ),
               _CalculatorCard(
                 title: 'WHO Growth Assessment',
                 icon: Icons.height,
-                description: 'Assess nutritional status using WHO Z-scores (0-59 months)',
+                description:
+                    'Assess nutritional status using WHO Z-scores (0-59 months)',
                 onTap: () => context.go('/who-growth-assessment'),
               ),
               _CalculatorCard(
                 title: 'Iron Sucrose (IV)',
                 icon: Icons.healing,
-                description: 'Calculate iron sucrose dosing using Ganzoni formula',
+                description:
+                    'Calculate iron sucrose dosing using Ganzoni formula',
                 onTap: () => context.go('/iron-sucrose'),
               ),
               _CalculatorCard(
@@ -83,13 +87,15 @@ class HomeScreen extends StatelessWidget {
               _CalculatorCard(
                 title: 'Burn Resuscitation',
                 icon: Icons.local_fire_department,
-                description: 'Calculate fluid resuscitation using Parkland formula',
+                description:
+                    'Calculate fluid resuscitation using Parkland formula',
                 onTap: () => context.go('/burn-resuscitation'),
               ),
               _CalculatorCard(
                 title: 'Pediatric Burn Resuscitation',
                 icon: Icons.child_friendly,
-                description: 'Parkland formula + maintenance fluids (Holliday-Segar) for children',
+                description:
+                    'Parkland formula + maintenance fluids (Holliday-Segar) for children',
                 onTap: () => context.go('/pediatric-burn-resuscitation'),
               ),
               const SizedBox(height: 16),
@@ -101,13 +107,14 @@ class HomeScreen extends StatelessWidget {
               _CalculatorCard(
                 title: 'Sodium Correction',
                 icon: Icons.science,
-                description: 'Calculate sodium correction and 3% NS volume',
+                description: 'Calculate sodium correction and 3% Saline volume',
                 onTap: () => context.go('/sodium'),
               ),
               _CalculatorCard(
                 title: 'Potassium Correction',
                 icon: Icons.science,
-                description: 'Calculate potassium correction and Slow-K tablets',
+                description:
+                    'Calculate potassium correction and Slow-K tablets',
                 onTap: () => context.go('/potassium'),
               ),
               _CalculatorCard(
@@ -157,7 +164,9 @@ class _CalculatorCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -171,10 +180,7 @@ class _CalculatorCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
+                    Text(title, style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 4),
                     Text(
                       description,
@@ -194,4 +200,3 @@ class _CalculatorCard extends StatelessWidget {
     );
   }
 }
-

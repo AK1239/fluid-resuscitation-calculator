@@ -153,9 +153,9 @@ Map<String, double> calculateInsulinDosing({
   final morningInsoluble = (morningDoseTotal * 2 / 3);
   final morningSoluble = (morningDoseTotal * 1 / 3);
 
-  // Evening dose: 1/2 Insoluble, 1/2 Soluble
-  final eveningInsoluble = (eveningDoseTotal * 1 / 2);
-  final eveningSoluble = (eveningDoseTotal * 1 / 2);
+  // Evening dose: 2/3 Insoluble, 1/3 Soluble
+  final eveningInsoluble = (eveningDoseTotal * 2 / 3);
+  final eveningSoluble = (eveningDoseTotal * 1 / 3);
 
   return {
     'totalDailyDose': totalDailyDose,

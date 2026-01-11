@@ -130,9 +130,9 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }
@@ -143,9 +143,9 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
       child: Text(
         gender,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }
@@ -171,10 +171,9 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
             chart.assetPath,
             fit: BoxFit.contain,
             width: double.infinity,
-            cacheWidth: (MediaQuery.of(context).size.width *
-                    MediaQuery.of(context).devicePixelRatio)
-                .toInt(),
             errorBuilder: (context, error, stackTrace) {
+              debugPrint('Error loading chart: ${chart.assetPath}');
+              debugPrint('Error: $error');
               return Container(
                 height: 200,
                 color: Colors.grey[200],
@@ -191,8 +190,17 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
                       Text(
                         'Unable to load chart',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        chart.assetPath,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[500],
+                          fontSize: 10,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
@@ -232,9 +240,9 @@ class WhoGrowthAssessmentScreen extends ConsumerWidget {
       child: Text(
         'Source: WHO Growth Standards',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontStyle: FontStyle.italic,
-            ),
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          fontStyle: FontStyle.italic,
+        ),
         textAlign: TextAlign.center,
       ),
     );
