@@ -106,3 +106,43 @@ FluidResuscitationPhases calculateFluidResuscitationPhases({
     phase3HourlyRate: phase3HourlyRate,
   );
 }
+
+/// Calculates insulin dosing using 2/3-1/3 rule
+/// Returns a map with all calculated values
+/// TDD = factor × weight (kg), where factor is typically 0.3-0.5 U/kg/day
+/// Morning dose: 2/3 of TDD
+///   - 2/3 Insoluble (NPH)
+///   - 1/3 Soluble (Regular)
+/// Evening dose: 1/3 of TDD
+///   - 1/2 Insoluble (NPH)
+///   - 1/2 Soluble (Regular)
+Map<String, double> calculateInsulinDosing({
+  required double weightKg,
+  double tddFactor = 0.5, // Default 0.5 U/kg/day (typical adult range: 0.3-0.5)
+}) {
+  // Step 1: Calculate Total Daily Dose (TDD)
+  final totalDailyDose = tddFactor * weightKg;
+
+  // Step 2: Split by time of day
+  final morningDoseTotal = (totalDailyDose * 2 / 3);
+  final eveningDoseTotal = (totalDailyDose * 1 / 3);
+
+  // Step 3: Split each dose into insoluble vs soluble
+  // Morning dose: 2/3 Insoluble, 1/3 Soluble
+  final morningInsoluble = (morningDoseTotal * 2 / 3);
+  final morningSoluble = (morningDoseTotal * 1 / 3);
+
+  // Evening dose: 1/2 Insoluble, 1/2 Soluble
+  final eveningInsoluble = (eveningDoseTotal * 1 / 2);
+  final eveningSoluble = (eveningDoseTotal * 1 / 2);
+
+  return {
+    'totalDailyDose': totalDailyDose,
+    'morningDoseTotal': morningDoseTotal,
+    'morningInsoluble': morningInsoluble,
+    'morningSoluble': morningSoluble,
+    'eveningDoseTotal': eveningDoseTotal,
+    'eveningInsoluble': eveningInsoluble,
+    'eveningSoluble': eveningSoluble,
+  };
+}

@@ -8,6 +8,7 @@ import 'package:chemical_app/features/electrolytes/sodium/presentation/screens/s
 import 'package:chemical_app/features/electrolytes/potassium/presentation/screens/potassium_correction_screen.dart';
 import 'package:chemical_app/features/electrolytes/magnesium/presentation/screens/magnesium_correction_screen.dart';
 import 'package:chemical_app/features/electrolytes/calcium/presentation/screens/calcium_correction_screen.dart';
+import 'package:chemical_app/features/insulin_dosing/presentation/screens/insulin_dosing_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -47,6 +48,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/calcium',
       builder: (context, state) => const CalciumCorrectionScreen(),
+    ),
+    GoRoute(
+      path: '/insulin-dosing',
+      builder: (context, state) => const InsulinDosingScreen(),
     ),
   ],
 );

@@ -33,6 +33,12 @@ class HomeScreen extends StatelessWidget {
                 description: 'Calculate daily and hourly maintenance fluid rates',
                 onTap: () => context.go('/maintenance-fluids'),
               ),
+              _CalculatorCard(
+                title: 'Insulin Dosing',
+                icon: Icons.medication,
+                description: 'Calculate insulin dosing using 2/3-1/3 rule',
+                onTap: () => context.go('/insulin-dosing'),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Electrolyte Corrections',
