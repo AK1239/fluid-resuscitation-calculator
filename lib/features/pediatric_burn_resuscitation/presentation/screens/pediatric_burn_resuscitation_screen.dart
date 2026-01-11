@@ -66,7 +66,7 @@ class _PediatricBurnResuscitationScreenState
         title: const Text('Pediatric Burn Resuscitation'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+          onPressed: () => context.go('/burn-resuscitation'),
         ),
       ),
       body: SingleChildScrollView(

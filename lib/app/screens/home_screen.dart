@@ -91,13 +91,6 @@ class HomeScreen extends StatelessWidget {
                     'Calculate fluid resuscitation using Parkland formula',
                 onTap: () => context.go('/burn-resuscitation'),
               ),
-              _CalculatorCard(
-                title: 'Pediatric Burn Resuscitation',
-                icon: Icons.child_friendly,
-                description:
-                    'Parkland formula + maintenance fluids (Holliday-Segar) for children',
-                onTap: () => context.go('/pediatric-burn-resuscitation'),
-              ),
               const SizedBox(height: 16),
               Text(
                 'Electrolyte Corrections',
