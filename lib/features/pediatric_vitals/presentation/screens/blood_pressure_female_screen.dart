@@ -79,9 +79,8 @@ class BloodPressureFemaleScreen extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           'Unable to load chart',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[600],
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: Colors.grey[600]),
                         ),
                       ],
                     ),

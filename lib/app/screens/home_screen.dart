@@ -65,24 +65,11 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/obstetric-calculator'),
               ),
               _CalculatorCard(
-                title: 'WHO Growth Assessment',
-                icon: Icons.height,
-                description:
-                    'Assess nutritional status using WHO Z-scores (0-59 months)',
-                onTap: () => context.go('/who-growth-assessment'),
-              ),
-              _CalculatorCard(
                 title: 'Iron Sucrose (IV)',
                 icon: Icons.healing,
                 description:
                     'Calculate iron sucrose dosing using Ganzoni formula',
                 onTap: () => context.go('/iron-sucrose'),
-              ),
-              _CalculatorCard(
-                title: 'Developmental Screening',
-                icon: Icons.psychology,
-                description: 'Screen developmental milestones and flag delays',
-                onTap: () => context.go('/developmental-screening'),
               ),
               _CalculatorCard(
                 title: 'Burn Resuscitation',
@@ -91,14 +78,7 @@ class HomeScreen extends StatelessWidget {
                     'Calculate fluid resuscitation using Parkland formula',
                 onTap: () => context.go('/burn-resuscitation'),
               ),
-              _CalculatorCard(
-                title: 'Pediatric Vitals',
-                icon: Icons.favorite,
-                description:
-                    'View pediatric vital signs reference charts (blood pressure, pulse rate, respiratory rate)',
-                onTap: () => context.go('/pediatric-vitals'),
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               Text(
                 'Electrolyte Corrections',
                 style: Theme.of(context).textTheme.titleLarge,
@@ -128,6 +108,32 @@ class HomeScreen extends StatelessWidget {
                 icon: Icons.science,
                 description: 'Calculate calcium correction dosing',
                 onTap: () => context.go('/calcium'),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Pediatrics',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 24),
+              _CalculatorCard(
+                title: 'WHO Growth Assessment',
+                icon: Icons.height,
+                description:
+                    'Assess nutritional status using WHO Z-scores (0-59 months)',
+                onTap: () => context.go('/who-growth-assessment'),
+              ),
+              _CalculatorCard(
+                title: 'Developmental Screening',
+                icon: Icons.psychology,
+                description: 'Screen developmental milestones and flag delays',
+                onTap: () => context.go('/developmental-screening'),
+              ),
+              _CalculatorCard(
+                title: 'Pediatric Vitals',
+                icon: Icons.favorite,
+                description:
+                    'View pediatric vital signs reference charts (blood pressure, pulse rate, respiratory rate)',
+                onTap: () => context.go('/pediatric-vitals'),
               ),
             ],
           ),
