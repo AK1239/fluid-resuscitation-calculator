@@ -45,6 +45,12 @@ class HomeScreen extends StatelessWidget {
                 description: 'Calculate EDD using Naegele\'s rule and gestational age',
                 onTap: () => context.go('/obstetric-calculator'),
               ),
+              _CalculatorCard(
+                title: 'WHO Growth Assessment',
+                icon: Icons.height,
+                description: 'Assess nutritional status using WHO Z-scores (0-59 months)',
+                onTap: () => context.go('/who-growth-assessment'),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Electrolyte Corrections',

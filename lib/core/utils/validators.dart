@@ -181,3 +181,54 @@ String? validateDate(String? value) {
     return 'Invalid date';
   }
 }
+
+/// Validates age in months (0-59 months for WHO standards)
+String? validateAgeMonths(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Age is required';
+  }
+  final age = int.tryParse(value);
+  if (age == null) {
+    return 'Please enter a valid number';
+  }
+  if (age < 0) {
+    return 'Age cannot be negative';
+  }
+  if (age > 59) {
+    return 'Age must be ≤59 months for WHO Child Growth Standards';
+  }
+  return null;
+}
+
+/// Validates height in cm
+String? validateHeightCm(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Height is required';
+  }
+  final height = double.tryParse(value);
+  if (height == null) {
+    return 'Please enter a valid number';
+  }
+  if (height <= 0) {
+    return 'Height must be greater than 0';
+  }
+  if (height > 200) {
+    return 'Height seems unrealistic (max 200 cm)';
+  }
+  return null;
+}
+
+/// Validates Z-score (typically ranges from -6 to +6)
+String? validateZScore(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Z-score is required';
+  }
+  final zScore = double.tryParse(value);
+  if (zScore == null) {
+    return 'Please enter a valid number';
+  }
+  if (zScore < -6 || zScore > 6) {
+    return 'Z-score seems out of range (-6 to +6)';
+  }
+  return null;
+}
