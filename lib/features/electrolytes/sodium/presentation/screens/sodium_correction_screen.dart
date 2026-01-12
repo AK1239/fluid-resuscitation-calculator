@@ -66,10 +66,7 @@ class _SodiumCorrectionScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Sex',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('Sex', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             SegmentedButton<bool>(
               segments: const [
@@ -114,7 +111,24 @@ class _SodiumCorrectionScreenState
             if (result != null) ...[
               const Divider(),
               const SizedBox(height: 16),
-              SodiumResultWidget(result: result),
+              Builder(
+                builder: (context) {
+                  // Calculate correction rate (targetNa - currentNa)
+                  double? correctionRate;
+                  if (formState.currentNa != null &&
+                      formState.targetNa != null) {
+                    final current = double.tryParse(formState.currentNa!);
+                    final target = double.tryParse(formState.targetNa!);
+                    if (current != null && target != null) {
+                      correctionRate = target - current;
+                    }
+                  }
+                  return SodiumResultWidget(
+                    result: result,
+                    correctionRate: correctionRate,
+                  );
+                },
+              ),
             ],
           ],
         ),
@@ -122,4 +136,3 @@ class _SodiumCorrectionScreenState
     );
   }
 }
-
