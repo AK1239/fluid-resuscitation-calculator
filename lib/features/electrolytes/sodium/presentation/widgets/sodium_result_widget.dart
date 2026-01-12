@@ -5,22 +5,14 @@ import 'package:chemical_app/features/electrolytes/sodium/domain/entities/sodium
 
 class SodiumResultWidget extends StatelessWidget {
   final SodiumCorrectionResult result;
-  final double?
-  correctionRate; // Correction rate in mmol/L (targetNa - currentNa)
 
-  const SodiumResultWidget({
-    super.key,
-    required this.result,
-    this.correctionRate,
-  });
+  const SodiumResultWidget({super.key, required this.result});
 
   @override
   Widget build(BuildContext context) {
-    final exceedsSafeRate = correctionRate != null && correctionRate! > 8.0;
-
     return Column(
       children: [
-        if (exceedsSafeRate) ...[
+        if (result.wasAdjusted) ...[
           Container(
             padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.only(bottom: 16),
@@ -32,7 +24,7 @@ class SodiumResultWidget extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.warning_amber_rounded,
+                  Icons.info_outline,
                   color: Colors.orange.shade700,
                   size: 32,
                 ),
@@ -42,7 +34,7 @@ class SodiumResultWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Correction Rate Warning',
+                        'Safe Correction Rate Applied',
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(
                               fontWeight: FontWeight.bold,
@@ -51,8 +43,8 @@ class SodiumResultWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Correction rate (${formatNumber(correctionRate!, decimals: 1)} mmol/L) exceeds the safe limit of 8 mmol/L per 24 hours. '
-                        'Rapid correction may cause serious complications. Consider slower correction over multiple days.',
+                        'Your desired target (${formatNumber(result.desiredTargetNa!, decimals: 1)} mEq/L) would require a correction rate exceeding the safe limit of 8 mmol/L per 24 hours. '
+                        'The calculation below uses the maximum safe target (${formatNumber(result.safeTargetNa, decimals: 1)} mEq/L) to prevent complications.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.orange.shade900,
                         ),
@@ -68,13 +60,18 @@ class SodiumResultWidget extends StatelessWidget {
           title: 'Sodium Correction',
           child: Column(
             children: [
-              if (correctionRate != null)
-                ResultRow(
-                  label: 'Correction Rate',
-                  value: formatNumber(correctionRate!, decimals: 1),
-                  unit: 'mmol/L',
-                  isHighlighted: false,
-                ),
+              ResultRow(
+                label: 'Safe Target Sodium',
+                value: formatNumber(result.safeTargetNa, decimals: 1),
+                unit: 'mEq/L',
+                isHighlighted: false,
+              ),
+              ResultRow(
+                label: 'Correction Rate',
+                value: formatNumber(result.correctionRate, decimals: 1),
+                unit: 'mmol/L/24h',
+                isHighlighted: false,
+              ),
               ResultRow(
                 label: 'Sodium Required',
                 value: formatNumber(result.sodiumRequiredMEq, decimals: 1),
