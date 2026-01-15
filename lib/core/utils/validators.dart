@@ -304,3 +304,21 @@ String? validateHemoglobin(String? value) {
   }
   return null;
 }
+
+/// Validates norepinephrine dose (µg/kg/min)
+String? validateNorepinephrineDose(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Dose is required';
+  }
+  final dose = double.tryParse(value);
+  if (dose == null) {
+    return 'Please enter a valid number';
+  }
+  if (dose <= 0) {
+    return 'Dose must be greater than 0';
+  }
+  if (dose > 5) {
+    return 'Dose seems unrealistic (max 5 µg/kg/min)';
+  }
+  return null;
+}

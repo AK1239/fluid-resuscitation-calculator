@@ -22,6 +22,7 @@ import 'package:chemical_app/features/pediatric_vitals/presentation/screens/bloo
 import 'package:chemical_app/features/pediatric_vitals/presentation/screens/blood_pressure_male_screen.dart';
 import 'package:chemical_app/features/pediatric_vitals/presentation/screens/blood_pressure_female_screen.dart';
 import 'package:chemical_app/features/pediatric_vitals/presentation/screens/blood_pressure_interpretation_screen.dart';
+import 'package:chemical_app/features/norepinephrine/presentation/screens/norepinephrine_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -111,6 +112,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/pediatric-vitals/blood-pressure/interpretation',
       builder: (context, state) => const BloodPressureInterpretationScreen(),
+    ),
+    GoRoute(
+      path: '/norepinephrine',
+      builder: (context, state) => const NorepinephrineScreen(),
     ),
   ],
 );

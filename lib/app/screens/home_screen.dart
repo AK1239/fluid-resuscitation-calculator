@@ -58,6 +58,12 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/insulin-dosing'),
               ),
               _CalculatorCard(
+                title: 'Norepinephrine Infusion',
+                icon: Icons.medication_liquid,
+                description: 'Calculate norepinephrine infusion dosing and rate',
+                onTap: () => context.go('/norepinephrine'),
+              ),
+              _CalculatorCard(
                 title: 'Obstetric Calculator',
                 icon: Icons.child_care,
                 description:
