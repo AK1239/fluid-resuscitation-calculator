@@ -322,3 +322,39 @@ String? validateNorepinephrineDose(String? value) {
   }
   return null;
 }
+
+/// Validates gestational age weeks
+String? validateGaWeeks(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Weeks is required';
+  }
+  final weeks = int.tryParse(value);
+  if (weeks == null) {
+    return 'Please enter a valid number';
+  }
+  if (weeks < 0) {
+    return 'Weeks cannot be negative';
+  }
+  if (weeks > 45) {
+    return 'Weeks seems unrealistic (max 45 weeks)';
+  }
+  return null;
+}
+
+/// Validates gestational age days (must be 0-6)
+String? validateGaDays(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Days is required';
+  }
+  final days = int.tryParse(value);
+  if (days == null) {
+    return 'Please enter a valid number';
+  }
+  if (days < 0) {
+    return 'Days cannot be negative';
+  }
+  if (days >= 7) {
+    return 'Days must be between 0-6';
+  }
+  return null;
+}

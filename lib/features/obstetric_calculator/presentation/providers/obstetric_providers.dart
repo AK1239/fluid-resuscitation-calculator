@@ -10,12 +10,21 @@ final obstetricRepositoryProvider = Provider<ObstetricRepositoryImpl>((ref) {
 /// Form state
 class ObstetricFormState {
   final DateTime? lmp; // LMP date
-  // Today's date is automatically used, not stored in form state
+  final DateTime? calculationDate; // Date for GA calculation (defaults to today if null)
 
-  const ObstetricFormState({this.lmp});
+  const ObstetricFormState({
+    this.lmp,
+    this.calculationDate,
+  });
 
-  ObstetricFormState copyWith({DateTime? lmp}) {
-    return ObstetricFormState(lmp: lmp ?? this.lmp);
+  ObstetricFormState copyWith({
+    DateTime? lmp,
+    DateTime? calculationDate,
+  }) {
+    return ObstetricFormState(
+      lmp: lmp ?? this.lmp,
+      calculationDate: calculationDate ?? this.calculationDate,
+    );
   }
 
   bool get isValid {
@@ -29,6 +38,10 @@ class ObstetricFormNotifier extends StateNotifier<ObstetricFormState> {
 
   void setLmp(DateTime? lmp) {
     state = state.copyWith(lmp: lmp);
+  }
+
+  void setCalculationDate(DateTime? calculationDate) {
+    state = state.copyWith(calculationDate: calculationDate);
   }
 
   void reset() {
@@ -53,14 +66,14 @@ final obstetricResultProvider =
 
       try {
         final lmp = formState.lmp!;
-        final today = DateTime.now();
+        final calculationDate = formState.calculationDate ?? DateTime.now();
 
-        // Validate that today is after LMP (or same day)
-        if (today.isBefore(DateTime(lmp.year, lmp.month, lmp.day))) {
+        // Validate that calculation date is after LMP (or same day)
+        if (calculationDate.isBefore(DateTime(lmp.year, lmp.month, lmp.day))) {
           return null;
         }
 
-        return repository.calculate(lmp: lmp, today: today);
+        return repository.calculate(lmp: lmp, today: calculationDate);
       } catch (e) {
         return null;
       }

@@ -16,6 +16,7 @@ class ObstetricCalculatorScreen extends ConsumerStatefulWidget {
 class _ObstetricCalculatorScreenState
     extends ConsumerState<ObstetricCalculatorScreen> {
   DateTime? _selectedLmp;
+  DateTime? _selectedCalculationDate;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +24,15 @@ class _ObstetricCalculatorScreenState
     final result = ref.watch(obstetricResultProvider);
     final formNotifier = ref.read(obstetricFormProvider.notifier);
 
-    // Sync selected date with form state
+    // Sync selected dates with form state
     if (_selectedLmp != formState.lmp) {
       _selectedLmp = formState.lmp;
     }
+    if (_selectedCalculationDate != formState.calculationDate) {
+      _selectedCalculationDate = formState.calculationDate;
+    }
 
-    Future<void> selectDate(BuildContext context) async {
+    Future<void> selectLmpDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _selectedLmp ?? DateTime.now(),
@@ -54,12 +58,38 @@ class _ObstetricCalculatorScreenState
       }
     }
 
+    Future<void> selectCalculationDate(BuildContext context) async {
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _selectedCalculationDate ?? DateTime.now(),
+        firstDate: _selectedLmp ?? DateTime(1900),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
+        helpText: 'Select Date for GA Calculation',
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+      if (picked != null) {
+        setState(() {
+          _selectedCalculationDate = picked;
+        });
+        formNotifier.setCalculationDate(picked);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Obstetric Calculator'),
+        title: const Text('LMP Calculator'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+          onPressed: () => context.go('/obstetric-calculator'),
         ),
       ),
       body: SingleChildScrollView(
@@ -86,7 +116,7 @@ class _ObstetricCalculatorScreenState
             ),
             const SizedBox(height: 8),
             InkWell(
-              onTap: () => selectDate(context),
+              onTap: () => selectLmpDate(context),
               child: InputDecorator(
                 decoration: InputDecoration(
                   hintText: 'Tap to select date',
@@ -125,15 +155,60 @@ class _ObstetricCalculatorScreenState
                 ),
               ),
             ),
-            if (formState.lmp != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Today\'s date is automatically used for calculation',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+            const SizedBox(height: 24),
+            // Calculation Date Picker Field
+            Text(
+              'Date for GA Calculation',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: () => selectCalculationDate(context),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  hintText: 'Tap to select date (defaults to today)',
+                  suffixIcon: const Icon(Icons.calendar_today),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _selectedCalculationDate != null
+                          ? formatDate(_selectedCalculationDate!)
+                          : 'Today (${formatDate(DateTime.now())})',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: _selectedCalculationDate != null
+                            ? Theme.of(context).colorScheme.onSurface
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Leave unselected to use today\'s date, or select any date for retrospective charting',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
             const SizedBox(height: 32),
             if (result != null) ...[
               const Divider(),

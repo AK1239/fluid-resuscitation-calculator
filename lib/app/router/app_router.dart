@@ -10,6 +10,8 @@ import 'package:chemical_app/features/electrolytes/magnesium/presentation/screen
 import 'package:chemical_app/features/electrolytes/calcium/presentation/screens/calcium_correction_screen.dart';
 import 'package:chemical_app/features/insulin_dosing/presentation/screens/insulin_dosing_screen.dart';
 import 'package:chemical_app/features/obstetric_calculator/presentation/screens/obstetric_calculator_screen.dart';
+import 'package:chemical_app/features/obstetric_calculator/presentation/screens/obstetric_selection_screen.dart';
+import 'package:chemical_app/features/obstetric_calculator/presentation/screens/ultrasound_calculator_screen.dart';
 import 'package:chemical_app/features/who_growth_assessment/presentation/screens/who_growth_assessment_screen.dart';
 import 'package:chemical_app/features/iron_sucrose/presentation/screens/iron_sucrose_screen.dart';
 import 'package:chemical_app/features/developmental_screening/presentation/screens/developmental_screening_screen.dart';
@@ -63,7 +65,15 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/obstetric-calculator',
+      builder: (context, state) => const ObstetricSelectionScreen(),
+    ),
+    GoRoute(
+      path: '/obstetric-calculator/lmp',
       builder: (context, state) => const ObstetricCalculatorScreen(),
+    ),
+    GoRoute(
+      path: '/obstetric-calculator/ultrasound',
+      builder: (context, state) => const UltrasoundCalculatorScreen(),
     ),
     GoRoute(
       path: '/who-growth-assessment',
