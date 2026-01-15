@@ -48,10 +48,10 @@ class _InsulinDosingScreenState extends ConsumerState<InsulinDosingScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Insulin Dosing'),
+        title: const Text('Adult Insulin Dosing'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+          onPressed: () => context.go('/insulin-dosing'),
         ),
       ),
       body: SingleChildScrollView(
