@@ -17,23 +17,26 @@ class ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: backgroundColor,
-      child: Padding(
-        padding: padding ?? const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 12),
-            child,
-          ],
+    return SizedBox(
+      width: double.infinity,
+      child: Card(
+        color: backgroundColor,
+        child: Padding(
+          padding: padding ?? const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              child,
+            ],
+          ),
         ),
       ),
     );
@@ -64,10 +67,7 @@ class ResultRow extends StatelessWidget {
         children: [
           Expanded(
             flex: 2,
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            child: Text(label, style: Theme.of(context).textTheme.bodyLarge),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -80,20 +80,19 @@ class ResultRow extends StatelessWidget {
                     value,
                     textAlign: TextAlign.right,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal,
-                          fontSize: isHighlighted ? 18 : 16,
-                          color: isHighlighted
-                              ? Theme.of(context).colorScheme.primary
-                              : null,
-                        ),
+                      fontWeight: isHighlighted
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: isHighlighted ? 18 : 16,
+                      color: isHighlighted
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
                   ),
                 ),
                 if (unit != null) ...[
                   const SizedBox(width: 4),
-                  Text(
-                    unit!,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  Text(unit!, style: Theme.of(context).textTheme.bodyMedium),
                 ],
               ],
             ),
@@ -103,4 +102,3 @@ class ResultRow extends StatelessWidget {
     );
   }
 }
-
