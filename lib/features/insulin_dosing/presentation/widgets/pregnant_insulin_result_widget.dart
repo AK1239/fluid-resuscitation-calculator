@@ -12,26 +12,28 @@ class PregnantInsulinResultWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ResultCard(
-          title: 'Total Daily Insulin Dose',
-          child: Column(
-            children: [
-              ResultRow(
-                label: 'TDD',
-                value: formatNumber(result.totalDailyDose, decimals: 1),
-                unit: 'units/day',
-                isHighlighted: true,
-              ),
-              ResultRow(
-                label: 'Calculation',
-                value:
-                    '${formatNumber(result.maternalWeightKg, decimals: 1)} kg × ${_getUnitsPerKg(result.trimester, result.obesityClass)} U/kg',
-                isHighlighted: false,
-              ),
-            ],
+        if (result.requiresFourInjectionRegimen) ...[
+          ResultCard(
+            title: 'Total Daily Insulin Dose',
+            child: Column(
+              children: [
+                ResultRow(
+                  label: 'TDD',
+                  value: formatNumber(result.totalDailyDose, decimals: 1),
+                  unit: 'units/day',
+                  isHighlighted: true,
+                ),
+                ResultRow(
+                  label: 'Calculation',
+                  value:
+                      '${formatNumber(result.maternalWeightKg, decimals: 1)} kg × ${_getUnitsPerKg(result.trimester, result.obesityClass)} U/kg',
+                  isHighlighted: false,
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
+          const SizedBox(height: 16),
+        ],
         if (result.requiresFourInjectionRegimen) ...[
           ResultCard(
             title: 'Four-Injection Regimen',
@@ -40,35 +42,35 @@ class PregnantInsulinResultWidget extends StatelessWidget {
               children: [
                 if (result.morningBasal != null)
                   _InjectionRow(
-                    timing: 'Before breakfast',
+                    timing: 'Before breakfast (up to 15 min before)',
                     insulinType: 'NPH (basal)',
                     units: result.morningBasal!,
                     rationale: '2/3 of morning dose (2/3 of TDD)',
                   ),
                 if (result.morningRapidActingFourInjection != null)
                   _InjectionRow(
-                    timing: 'Before breakfast',
+                    timing: 'Before breakfast (up to 15 min before)',
                     insulinType: 'Rapid-acting (lispro/aspart)',
                     units: result.morningRapidActingFourInjection!,
                     rationale: '1/3 of morning dose',
                   ),
                 if (result.lunchRapidActing != null)
                   _InjectionRow(
-                    timing: 'Before lunch',
+                    timing: 'Before lunch (up to 15 min before)',
                     insulinType: 'Rapid-acting (lispro/aspart)',
                     units: result.lunchRapidActing!,
-                    rationale: 'Post-lunch hyperglycemia',
+                    rationale: 'Post-lunch hyperglycemia persists',
                   ),
                 if (result.dinnerRapidActing != null)
                   _InjectionRow(
-                    timing: 'Before dinner',
+                    timing: 'Before dinner (up to 15 min before)',
                     insulinType: 'Rapid-acting (lispro/aspart)',
                     units: result.dinnerRapidActing!,
                     rationale: '1/2 of evening dose (1/3 of TDD)',
                   ),
                 if (result.bedtimeBasal != null)
                   _InjectionRow(
-                    timing: 'Bedtime',
+                    timing: 'Bedtime (or before dinner if individualized)',
                     insulinType: 'NPH or Long-acting (glargine)',
                     units: result.bedtimeBasal!,
                     rationale: '1/2 of evening dose',
@@ -78,23 +80,30 @@ class PregnantInsulinResultWidget extends StatelessWidget {
           ),
         ] else ...[
           ResultCard(
-            title: 'Standard Initial Regimen',
+            title: 'Initial Regimen',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (result.morningNph != null)
                   _InjectionRow(
-                    timing: 'Before breakfast',
-                    insulinType: 'NPH (basal)',
+                    timing: 'Before breakfast (immediately before)',
+                    insulinType: 'NPH (intermediate-acting basal)',
                     units: result.morningNph!,
                     rationale: 'Starting dose: 10-20 units',
                   ),
                 if (result.morningRapidActing != null)
                   _InjectionRow(
-                    timing: 'Before breakfast',
+                    timing: 'Before breakfast (immediately before)',
                     insulinType: 'Rapid-acting (lispro/aspart)',
                     units: result.morningRapidActing!,
                     rationale: 'Starting dose: 6-10 units',
+                  ),
+                if (result.bedtimeBasal != null)
+                  _InjectionRow(
+                    timing: 'Bedtime (preferably, or with dinner if individualized)',
+                    insulinType: 'NPH or Long-acting (glargine)',
+                    units: result.bedtimeBasal!,
+                    rationale: 'Initial dose: 0.2 units/kg (fasting glucose elevated, postprandials controlled)',
                   ),
               ],
             ),
@@ -148,9 +157,9 @@ class PregnantInsulinResultWidget extends StatelessWidget {
                   Text(
                     'Clinical Notes',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade900,
+                    ),
                   ),
                 ],
               ),
@@ -159,9 +168,9 @@ class PregnantInsulinResultWidget extends StatelessWidget {
                 '• Doses are starting points and will be titrated based on glucose patterns\n'
                 '• Monitor blood glucose closely and adjust as needed\n'
                 '• All doses require clinical confirmation before administration',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.blue.shade900,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.blue.shade900),
               ),
             ],
           ),
@@ -214,15 +223,15 @@ class _InjectionRow extends StatelessWidget {
                     Text(
                       timing,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       insulinType,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -236,10 +245,10 @@ class _InjectionRow extends StatelessWidget {
                     Text(
                       formatNumber(units, decimals: 1),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 18,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 18,
+                      ),
                     ),
                     const SizedBox(width: 4),
                     Text(
@@ -255,9 +264,9 @@ class _InjectionRow extends StatelessWidget {
           Text(
             rationale,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontStyle: FontStyle.italic,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontStyle: FontStyle.italic,
+            ),
           ),
           const Divider(height: 16),
         ],
