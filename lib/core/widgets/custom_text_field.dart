@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final void Function(String)? onChanged;
+  final VoidCallback? onTap;
   final bool enabled;
   final String? hintText;
 
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.onChanged,
+    this.onTap,
     this.enabled = true,
     this.hintText,
   });
@@ -30,17 +32,14 @@ class CustomTextField extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(
-              label,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text(label, style: Theme.of(context).textTheme.titleMedium),
             if (unit != null) ...[
               const SizedBox(width: 8),
               Text(
                 '($unit)',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ],
           ],
@@ -51,13 +50,11 @@ class CustomTextField extends StatelessWidget {
           validator: validator,
           keyboardType: keyboardType ?? TextInputType.number,
           onChanged: onChanged,
+          onTap: onTap,
           enabled: enabled,
-          decoration: InputDecoration(
-            hintText: hintText,
-          ),
+          decoration: InputDecoration(hintText: hintText),
         ),
       ],
     );
   }
 }
-

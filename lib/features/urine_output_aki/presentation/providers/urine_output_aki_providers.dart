@@ -85,7 +85,7 @@ class UrineOutputAkiFormNotifier
   UrineOutputAkiFormNotifier()
     : super(
         UrineOutputAkiFormState(
-          previousVolume: '0',
+          previousVolume: null,
           currentTime: DateTime.now(),
         ),
       );
@@ -95,7 +95,8 @@ class UrineOutputAkiFormNotifier
   }
 
   void setPreviousVolume(String? previousVolume) {
-    state = state.copyWith(previousVolume: previousVolume ?? '0');
+    // Allow null/empty - will default to '0' in calculation
+    state = state.copyWith(previousVolume: previousVolume?.isEmpty == true ? null : previousVolume);
   }
 
   void setPreviousTime(DateTime? previousTime) {
@@ -112,7 +113,7 @@ class UrineOutputAkiFormNotifier
 
   void reset() {
     state = UrineOutputAkiFormState(
-      previousVolume: '0',
+      previousVolume: null,
       currentTime: DateTime.now(),
     );
   }

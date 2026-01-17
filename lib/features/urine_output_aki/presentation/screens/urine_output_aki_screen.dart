@@ -20,12 +20,17 @@ class _UrineOutputAkiScreenState extends ConsumerState<UrineOutputAkiScreen> {
   late final TextEditingController _previousVolumeController;
   late final TextEditingController _weightController;
   final _formKey = GlobalKey<FormState>();
+  
+  // Track which fields have been interacted with
+  bool _currentVolumeTouched = false;
+  bool _previousVolumeTouched = false;
+  bool _weightTouched = false;
 
   @override
   void initState() {
     super.initState();
     _currentVolumeController = TextEditingController();
-    _previousVolumeController = TextEditingController(text: '0');
+    _previousVolumeController = TextEditingController();
     _weightController = TextEditingController();
   }
 
@@ -156,11 +161,18 @@ class _UrineOutputAkiScreenState extends ConsumerState<UrineOutputAkiScreen> {
     final formNotifier = ref.read(urineOutputAkiFormProvider.notifier);
 
     // Sync controllers with state only if different (to avoid cursor jumping)
+    // For previous volume, allow empty string to stay empty (user can clear it)
     if (_currentVolumeController.text != (formState.currentVolume ?? '')) {
       _currentVolumeController.text = formState.currentVolume ?? '';
     }
-    if (_previousVolumeController.text != (formState.previousVolume ?? '0')) {
-      _previousVolumeController.text = formState.previousVolume ?? '0';
+    final previousVolumeState = formState.previousVolume ?? '';
+    if (_previousVolumeController.text != previousVolumeState) {
+      // Only sync if both are not empty, or if state is explicitly set
+      // This allows user to clear the field without it being reset
+      if (previousVolumeState.isNotEmpty ||
+          _previousVolumeController.text.isEmpty) {
+        _previousVolumeController.text = previousVolumeState;
+      }
     }
     if (_weightController.text != (formState.weightKg ?? '')) {
       _weightController.text = formState.weightKg ?? '';
@@ -197,12 +209,20 @@ class _UrineOutputAkiScreenState extends ConsumerState<UrineOutputAkiScreen> {
                 label: 'Current Urine Volume',
                 unit: 'mL',
                 controller: _currentVolumeController,
-                validator: _validateCurrentVolume,
+                validator: _currentVolumeTouched ? _validateCurrentVolume : null,
                 onChanged: (value) {
+                  if (!_currentVolumeTouched) {
+                    setState(() {
+                      _currentVolumeTouched = true;
+                    });
+                  }
                   formNotifier.setCurrentVolume(value);
-                  // Trigger validation on the other field
-                  if (_formKey.currentState != null) {
-                    _formKey.currentState!.validate();
+                },
+                onTap: () {
+                  if (!_currentVolumeTouched) {
+                    setState(() {
+                      _currentVolumeTouched = true;
+                    });
                   }
                 },
               ),
@@ -211,13 +231,30 @@ class _UrineOutputAkiScreenState extends ConsumerState<UrineOutputAkiScreen> {
                 label: 'Previous Urine Volume',
                 unit: 'mL',
                 controller: _previousVolumeController,
-                validator: validateUrineVolume,
-                hintText: 'Default: 0',
+                validator: _previousVolumeTouched
+                    ? (value) {
+                        // Allow empty (defaults to 0)
+                        if (value == null || value.isEmpty) {
+                          return null;
+                        }
+                        return validateUrineVolume(value);
+                      }
+                    : null,
+                hintText: 'Optional (defaults to 0)',
                 onChanged: (value) {
-                  formNotifier.setPreviousVolume(value.isEmpty ? '0' : value);
-                  // Trigger validation on current volume
-                  if (_formKey.currentState != null) {
-                    _formKey.currentState!.validate();
+                  if (!_previousVolumeTouched) {
+                    setState(() {
+                      _previousVolumeTouched = true;
+                    });
+                  }
+                  // Allow empty string - will default to 0 in calculation
+                  formNotifier.setPreviousVolume(value.isEmpty ? null : value);
+                },
+                onTap: () {
+                  if (!_previousVolumeTouched) {
+                    setState(() {
+                      _previousVolumeTouched = true;
+                    });
                   }
                 },
               ),
@@ -318,8 +355,22 @@ class _UrineOutputAkiScreenState extends ConsumerState<UrineOutputAkiScreen> {
                 label: 'Patient Weight',
                 unit: 'kg',
                 controller: _weightController,
-                validator: validateWeight,
-                onChanged: (value) => formNotifier.setWeightKg(value),
+                validator: _weightTouched ? validateWeight : null,
+                onChanged: (value) {
+                  if (!_weightTouched) {
+                    setState(() {
+                      _weightTouched = true;
+                    });
+                  }
+                  formNotifier.setWeightKg(value);
+                },
+                onTap: () {
+                  if (!_weightTouched) {
+                    setState(() {
+                      _weightTouched = true;
+                    });
+                  }
+                },
               ),
               const SizedBox(height: 24),
               Container(
