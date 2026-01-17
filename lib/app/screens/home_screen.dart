@@ -88,6 +88,12 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/renal-dose-adjustment'),
               ),
               _CalculatorCard(
+                title: 'eGFR Calculator',
+                icon: Icons.health_and_safety,
+                description: 'Estimate Glomerular Filtration Rate using CKD-EPI equations with CKD stage classification',
+                onTap: () => context.go('/egfr-calculator'),
+              ),
+              _CalculatorCard(
                 title: 'Obstetric Calculator',
                 icon: Icons.child_care,
                 description:

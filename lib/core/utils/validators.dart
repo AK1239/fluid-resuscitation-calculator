@@ -506,3 +506,21 @@ String? validateStandardDose(String? value) {
   }
   return null;
 }
+
+/// Validates cystatin C in mg/L (optional field)
+String? validateCystatinC(String? value) {
+  if (value == null || value.isEmpty) {
+    return null; // Cystatin C is optional
+  }
+  final cystatinC = double.tryParse(value);
+  if (cystatinC == null) {
+    return 'Please enter a valid number';
+  }
+  if (cystatinC <= 0) {
+    return 'Cystatin C must be greater than 0';
+  }
+  if (cystatinC > 10) {
+    return 'Cystatin C seems unrealistic (max 10 mg/L)';
+  }
+  return null;
+}

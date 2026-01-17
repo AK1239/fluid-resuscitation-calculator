@@ -31,6 +31,7 @@ import 'package:chemical_app/features/map_pulse_pressure/presentation/screens/ma
 import 'package:chemical_app/features/urine_output_aki/presentation/screens/urine_output_aki_screen.dart';
 import 'package:chemical_app/features/shock_index/presentation/screens/shock_index_screen.dart';
 import 'package:chemical_app/features/renal_dose_adjustment/presentation/screens/renal_dose_adjustment_screen.dart';
+import 'package:chemical_app/features/egfr_calculator/presentation/screens/egfr_calculator_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -156,6 +157,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/renal-dose-adjustment',
       builder: (context, state) => const RenalDoseAdjustmentScreen(),
+    ),
+    GoRoute(
+      path: '/egfr-calculator',
+      builder: (context, state) => const EgfrCalculatorScreen(),
     ),
   ],
 );
