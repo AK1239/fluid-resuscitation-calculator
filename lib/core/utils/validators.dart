@@ -470,3 +470,39 @@ String? validateAge(String? value) {
   }
   return null;
 }
+
+/// Validates serum creatinine in μmol/L
+String? validateSerumCreatinine(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Serum creatinine is required';
+  }
+  final creatinine = double.tryParse(value);
+  if (creatinine == null) {
+    return 'Please enter a valid number';
+  }
+  if (creatinine <= 0) {
+    return 'Creatinine must be greater than 0';
+  }
+  if (creatinine > 2000) {
+    return 'Creatinine seems unrealistic (max 2000 μmol/L)';
+  }
+  return null;
+}
+
+/// Validates standard drug dose in mg
+String? validateStandardDose(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Standard dose is required';
+  }
+  final dose = double.tryParse(value);
+  if (dose == null) {
+    return 'Please enter a valid number';
+  }
+  if (dose <= 0) {
+    return 'Dose must be greater than 0';
+  }
+  if (dose > 10000) {
+    return 'Dose seems unrealistic (max 10000 mg)';
+  }
+  return null;
+}

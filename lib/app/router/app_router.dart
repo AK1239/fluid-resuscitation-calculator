@@ -30,6 +30,7 @@ import 'package:chemical_app/features/norepinephrine/presentation/screens/norepi
 import 'package:chemical_app/features/map_pulse_pressure/presentation/screens/map_pulse_pressure_screen.dart';
 import 'package:chemical_app/features/urine_output_aki/presentation/screens/urine_output_aki_screen.dart';
 import 'package:chemical_app/features/shock_index/presentation/screens/shock_index_screen.dart';
+import 'package:chemical_app/features/renal_dose_adjustment/presentation/screens/renal_dose_adjustment_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -151,6 +152,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/shock-index',
       builder: (context, state) => const ShockIndexScreen(),
+    ),
+    GoRoute(
+      path: '/renal-dose-adjustment',
+      builder: (context, state) => const RenalDoseAdjustmentScreen(),
     ),
   ],
 );

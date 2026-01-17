@@ -82,6 +82,12 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/shock-index'),
               ),
               _CalculatorCard(
+                title: 'Renal Dose Adjustment',
+                icon: Icons.medication,
+                description: 'Calculate creatinine clearance and determine drug dose adjustments for renal impairment',
+                onTap: () => context.go('/renal-dose-adjustment'),
+              ),
+              _CalculatorCard(
                 title: 'Obstetric Calculator',
                 icon: Icons.child_care,
                 description:
