@@ -434,3 +434,39 @@ String? validateCurrentVolumeGreaterThanPrevious({
   }
   return null;
 }
+
+/// Validates heart rate (HR)
+String? validateHeartRate(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Heart rate is required';
+  }
+  final hr = double.tryParse(value);
+  if (hr == null) {
+    return 'Please enter a valid number';
+  }
+  if (hr <= 0) {
+    return 'Heart rate must be greater than 0';
+  }
+  if (hr < 30 || hr > 250) {
+    return 'Heart rate seems out of range (30-250 bpm)';
+  }
+  return null;
+}
+
+/// Validates age in years (optional field)
+String? validateAge(String? value) {
+  if (value == null || value.isEmpty) {
+    return null; // Age is optional
+  }
+  final age = double.tryParse(value);
+  if (age == null) {
+    return 'Please enter a valid number';
+  }
+  if (age < 0) {
+    return 'Age cannot be negative';
+  }
+  if (age > 120) {
+    return 'Age seems unrealistic (max 120 years)';
+  }
+  return null;
+}

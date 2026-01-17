@@ -76,6 +76,12 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/urine-output-aki'),
               ),
               _CalculatorCard(
+                title: 'Shock Index Calculator',
+                icon: Icons.emergency,
+                description: 'Calculate Shock Index (SI) and Trauma-Adjusted Shock Index (TASI) with risk stratification',
+                onTap: () => context.go('/shock-index'),
+              ),
+              _CalculatorCard(
                 title: 'Obstetric Calculator',
                 icon: Icons.child_care,
                 description:

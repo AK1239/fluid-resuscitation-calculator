@@ -29,6 +29,7 @@ import 'package:chemical_app/features/pediatric_vitals/presentation/screens/bloo
 import 'package:chemical_app/features/norepinephrine/presentation/screens/norepinephrine_screen.dart';
 import 'package:chemical_app/features/map_pulse_pressure/presentation/screens/map_pulse_pressure_screen.dart';
 import 'package:chemical_app/features/urine_output_aki/presentation/screens/urine_output_aki_screen.dart';
+import 'package:chemical_app/features/shock_index/presentation/screens/shock_index_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -146,6 +147,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/urine-output-aki',
       builder: (context, state) => const UrineOutputAkiScreen(),
+    ),
+    GoRoute(
+      path: '/shock-index',
+      builder: (context, state) => const ShockIndexScreen(),
     ),
   ],
 );
