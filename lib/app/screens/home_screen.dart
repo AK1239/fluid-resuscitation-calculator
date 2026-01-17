@@ -64,6 +64,12 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/norepinephrine'),
               ),
               _CalculatorCard(
+                title: 'MAP & Pulse Pressure',
+                icon: Icons.favorite,
+                description: 'Calculate Mean Arterial Pressure and Pulse Pressure with clinical interpretation',
+                onTap: () => context.go('/map-pulse-pressure'),
+              ),
+              _CalculatorCard(
                 title: 'Obstetric Calculator',
                 icon: Icons.child_care,
                 description:

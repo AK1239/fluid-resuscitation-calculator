@@ -358,3 +358,47 @@ String? validateGaDays(String? value) {
   }
   return null;
 }
+
+/// Validates systolic blood pressure (SBP)
+String? validateSystolicBp(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Systolic BP is required';
+  }
+  final sbp = double.tryParse(value);
+  if (sbp == null) {
+    return 'Please enter a valid number';
+  }
+  if (sbp < 40 || sbp > 300) {
+    return 'SBP must be between 40-300 mmHg';
+  }
+  return null;
+}
+
+/// Validates diastolic blood pressure (DBP)
+String? validateDiastolicBp(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Diastolic BP is required';
+  }
+  final dbp = double.tryParse(value);
+  if (dbp == null) {
+    return 'Please enter a valid number';
+  }
+  if (dbp < 40 || dbp > 300) {
+    return 'DBP must be between 40-300 mmHg';
+  }
+  return null;
+}
+
+/// Validates that SBP is greater than DBP
+String? validateSbpGreaterThanDbp({
+  required String? systolicBp,
+  required String? diastolicBp,
+}) {
+  final sbp = double.tryParse(systolicBp ?? '');
+  final dbp = double.tryParse(diastolicBp ?? '');
+
+  if (sbp != null && dbp != null && sbp <= dbp) {
+    return 'Systolic BP must be greater than Diastolic BP';
+  }
+  return null;
+}
