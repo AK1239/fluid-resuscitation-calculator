@@ -97,6 +97,53 @@ class ShockIndexResultWidget extends StatelessWidget {
     return Column(
       children: [
         ResultCard(
+          title: 'Input Values & Normal Ranges',
+          child: Column(
+            children: [
+              ResultRow(
+                label: 'Heart Rate',
+                value: formatNumber(result.heartRate, decimals: 0),
+                unit: 'bpm',
+                isHighlighted: false,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8, top: 4, bottom: 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Normal range: 60-100 bpm (adults at rest)',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[600],
+                          fontStyle: FontStyle.italic,
+                        ),
+                  ),
+                ),
+              ),
+              const Divider(),
+              ResultRow(
+                label: 'Systolic BP',
+                value: formatNumber(result.systolicBp, decimals: 0),
+                unit: 'mmHg',
+                isHighlighted: false,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8, top: 4, bottom: 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Normal range: 90-120 mmHg',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[600],
+                          fontStyle: FontStyle.italic,
+                        ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        ResultCard(
           title: 'Shock Index (SI)',
           child: Column(
             children: [
@@ -104,6 +151,19 @@ class ShockIndexResultWidget extends StatelessWidget {
                 label: 'Shock Index',
                 value: formatNumber(result.shockIndex, decimals: 2),
                 isHighlighted: true,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8, top: 4, bottom: 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Normal range: < 0.5',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[600],
+                          fontStyle: FontStyle.italic,
+                        ),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 8),
@@ -160,6 +220,19 @@ class ShockIndexResultWidget extends StatelessWidget {
                     decimals: 2,
                   ),
                   isHighlighted: true,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 4, bottom: 8),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Normal range: < 40',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey[600],
+                            fontStyle: FontStyle.italic,
+                          ),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
