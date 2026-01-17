@@ -1,11 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../data/calculators_repository.dart';
+import '../models/calculator_model.dart';
+import '../services/calculator_search_service.dart';
+import '../widgets/calculator_search_bar.dart';
+import '../widgets/calculator_list_header.dart';
+import '../widgets/empty_search_state.dart';
+import '../widgets/calculator_category_section.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _searchQuery = _searchController.text;
+    });
+  }
+
+  void _onSearchClear() {
+    _searchController.clear();
+  }
+
+  void _onCalculatorTap(String route) {
+    context.go(route);
+  }
+
+  List<CalculatorModel> get _filteredCalculators {
+    return CalculatorSearchService.filterCalculators(
+      CalculatorsRepository.allCalculators,
+      _searchQuery,
+    );
+  }
+
+  Map<String, List<CalculatorModel>> get _groupedCalculators {
+    return CalculatorSearchService.groupByCategory(_filteredCalculators);
+  }
+
+  List<String> get _sortedCategories {
+    final categories = _groupedCalculators.keys.toList();
+    return CalculatorSearchService.sortCategories(categories);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final grouped = _groupedCalculators;
+    final categories = _sortedCategories;
+    final filteredCalculators = _filteredCalculators;
+    final isSearching = _searchQuery.isNotEmpty;
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -28,249 +91,41 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Select Calculator',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 24),
-              _CalculatorCard(
-                title: 'Fluid Resuscitation',
-                icon: Icons.water_drop,
-                description: 'Calculate fluid deficit and resuscitation phases',
-                onTap: () => context.go('/fluid-resuscitation'),
-              ),
-              _CalculatorCard(
-                title: 'Maintenance Fluids',
-                icon: Icons.medical_services,
-                description:
-                    'Calculate daily and hourly maintenance fluid rates',
-                onTap: () => context.go('/maintenance-fluids'),
-              ),
-              _CalculatorCard(
-                title: 'Insulin Dosing',
-                icon: Icons.medication,
-                description: 'Calculate insulin dosing using 2/3-1/3 rule',
-                onTap: () => context.go('/insulin-dosing'),
-              ),
-              _CalculatorCard(
-                title: 'Norepinephrine Infusion',
-                icon: Icons.medication_liquid,
-                description:
-                    'Calculate norepinephrine infusion dosing and rate',
-                onTap: () => context.go('/norepinephrine'),
-              ),
-              _CalculatorCard(
-                title: 'MAP & Pulse Pressure',
-                icon: Icons.favorite,
-                description:
-                    'Calculate Mean Arterial Pressure and Pulse Pressure with clinical interpretation',
-                onTap: () => context.go('/map-pulse-pressure'),
-              ),
-              _CalculatorCard(
-                title: 'Urine Output & AKI Staging',
-                icon: Icons.water_drop_outlined,
-                description:
-                    'Calculate urine output and KDIGO AKI staging based on urine volume measurements',
-                onTap: () => context.go('/urine-output-aki'),
-              ),
-              _CalculatorCard(
-                title: 'Shock Index Calculator',
-                icon: Icons.emergency,
-                description:
-                    'Calculate Shock Index (SI) and Trauma-Adjusted Shock Index (TASI) with risk stratification',
-                onTap: () => context.go('/shock-index'),
-              ),
-              _CalculatorCard(
-                title: 'Creatinine Clearance',
-                icon: Icons.medication,
-                description:
-                    'Calculate creatinine clearance and determine drug dose adjustments for renal impairment',
-                onTap: () => context.go('/renal-dose-adjustment'),
-              ),
-              _CalculatorCard(
-                title: 'eGFR Calculator',
-                icon: Icons.health_and_safety,
-                description:
-                    'Estimate Glomerular Filtration Rate using CKD-EPI equations with CKD stage classification',
-                onTap: () => context.go('/egfr-calculator'),
-              ),
-              _CalculatorCard(
-                title: 'BMI Calculator',
-                icon: Icons.monitor_weight,
-                description:
-                    'Calculate Body Mass Index with WHO classification and clinical interpretation',
-                onTap: () => context.go('/bmi-calculator'),
-              ),
-              _CalculatorCard(
-                title: 'Maintenance Calories',
-                icon: Icons.local_dining,
-                description:
-                    'Calculate daily caloric requirements and equivalent IV dextrose volumes for maintenance',
-                onTap: () => context.go('/maintenance-calories'),
-              ),
-              _CalculatorCard(
-                title: 'Bishop Score',
-                icon: Icons.pregnant_woman,
-                description:
-                    'Assess cervical favorability for induction of labor with evidence-based management guidance',
-                onTap: () => context.go('/bishop-score'),
-              ),
-              _CalculatorCard(
-                title: 'ATLS Shock Classification',
-                icon: Icons.emergency_outlined,
-                description:
-                    'Classify hemorrhagic shock using ATLS 10th Edition criteria with automatic parameter derivation',
-                onTap: () => context.go('/atls-shock-classification'),
-              ),
-              _CalculatorCard(
-                title: 'Obstetric Calculator',
-                icon: Icons.child_care,
-                description:
-                    'Calculate EDD using Naegele\'s rule and gestational age',
-                onTap: () => context.go('/obstetric-calculator'),
-              ),
-              _CalculatorCard(
-                title: 'Iron Sucrose (IV)',
-                icon: Icons.healing,
-                description:
-                    'Calculate iron sucrose dosing using Ganzoni formula',
-                onTap: () => context.go('/iron-sucrose'),
-              ),
-              _CalculatorCard(
-                title: 'Burn Resuscitation',
-                icon: Icons.local_fire_department,
-                description:
-                    'Calculate fluid resuscitation using Parkland formula',
-                onTap: () => context.go('/burn-resuscitation'),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Electrolyte Corrections',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 16),
-              _CalculatorCard(
-                title: 'Sodium Correction',
-                icon: Icons.science,
-                description: 'Calculate sodium correction and 3% Saline volume',
-                onTap: () => context.go('/sodium'),
-              ),
-              _CalculatorCard(
-                title: 'Potassium Correction',
-                icon: Icons.science,
-                description:
-                    'Calculate potassium correction and Slow-K tablets',
-                onTap: () => context.go('/potassium'),
-              ),
-              _CalculatorCard(
-                title: 'Magnesium Correction',
-                icon: Icons.science,
-                description: 'Calculate magnesium correction dosing',
-                onTap: () => context.go('/magnesium'),
-              ),
-              _CalculatorCard(
-                title: 'Calcium Correction',
-                icon: Icons.science,
-                description: 'Calculate calcium correction dosing',
-                onTap: () => context.go('/calcium'),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Pediatrics',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 24),
-              _CalculatorCard(
-                title: 'WHO Growth Assessment',
-                icon: Icons.height,
-                description:
-                    'Assess nutritional status using WHO Z-scores (0-59 months)',
-                onTap: () => context.go('/who-growth-assessment'),
-              ),
-              _CalculatorCard(
-                title: 'Developmental Screening',
-                icon: Icons.psychology,
-                description: 'Screen developmental milestones and flag delays',
-                onTap: () => context.go('/developmental-screening'),
-              ),
-              _CalculatorCard(
-                title: 'Pediatric Vitals',
-                icon: Icons.favorite,
-                description:
-                    'View pediatric vital signs reference charts (blood pressure, pulse rate, respiratory rate)',
-                onTap: () => context.go('/pediatric-vitals'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CalculatorCard extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final String description;
-  final VoidCallback onTap;
-
-  const _CalculatorCard({
-    required this.title,
-    required this.icon,
-    required this.description,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  icon,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 32,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
+        child: Column(
+          children: [
+            CalculatorSearchBar(
+              controller: _searchController,
+              onChanged: (_) {},
+              onClear: _onSearchClear,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 4),
-                    Text(
-                      description,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    CalculatorListHeader(
+                      isSearching: isSearching,
+                      resultCount: filteredCalculators.length,
                     ),
+                    if (filteredCalculators.isEmpty)
+                      const EmptySearchState()
+                    else
+                      ...categories.map((category) {
+                        return CalculatorCategorySection(
+                          category: category,
+                          calculators: grouped[category]!,
+                          showCategoryTitle:
+                              !isSearching || categories.length > 1,
+                          onCalculatorTap: _onCalculatorTap,
+                        );
+                      }),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
