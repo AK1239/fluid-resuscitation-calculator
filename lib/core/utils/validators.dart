@@ -148,7 +148,7 @@ String? validateDate(String? value) {
   if (value == null || value.isEmpty) {
     return 'Date is required';
   }
-  
+
   final parts = value.split('/');
   if (parts.length != 3) {
     return 'Please enter date in DD/MM/YYYY format';
@@ -161,15 +161,15 @@ String? validateDate(String? value) {
   if (day == null || month == null || year == null) {
     return 'Please enter valid numbers';
   }
-  
+
   if (month < 1 || month > 12) {
     return 'Month must be between 1 and 12';
   }
-  
+
   if (day < 1 || day > 31) {
     return 'Day must be between 1 and 31';
   }
-  
+
   if (year < 1900 || year > 2100) {
     return 'Year must be between 1900 and 2100';
   }
@@ -399,6 +399,38 @@ String? validateSbpGreaterThanDbp({
 
   if (sbp != null && dbp != null && sbp <= dbp) {
     return 'Systolic BP must be greater than Diastolic BP';
+  }
+  return null;
+}
+
+/// Validates urine volume in mL
+String? validateUrineVolume(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Urine volume is required';
+  }
+  final volume = double.tryParse(value);
+  if (volume == null) {
+    return 'Please enter a valid number';
+  }
+  if (volume < 0) {
+    return 'Volume cannot be negative';
+  }
+  if (volume > 10000) {
+    return 'Volume seems unrealistic (max 10000 mL)';
+  }
+  return null;
+}
+
+/// Validates that current volume is greater than or equal to previous volume
+String? validateCurrentVolumeGreaterThanPrevious({
+  required String? currentVolume,
+  required String? previousVolume,
+}) {
+  final current = double.tryParse(currentVolume ?? '');
+  final previous = double.tryParse(previousVolume ?? '0');
+
+  if (current != null && previous != null && current < previous) {
+    return 'Current volume must be ≥ previous volume';
   }
   return null;
 }

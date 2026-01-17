@@ -70,6 +70,12 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/map-pulse-pressure'),
               ),
               _CalculatorCard(
+                title: 'Urine Output & AKI Staging',
+                icon: Icons.water_drop_outlined,
+                description: 'Calculate urine output and KDIGO AKI staging based on urine volume measurements',
+                onTap: () => context.go('/urine-output-aki'),
+              ),
+              _CalculatorCard(
                 title: 'Obstetric Calculator',
                 icon: Icons.child_care,
                 description:

@@ -28,6 +28,7 @@ import 'package:chemical_app/features/pediatric_vitals/presentation/screens/bloo
 import 'package:chemical_app/features/pediatric_vitals/presentation/screens/blood_pressure_interpretation_screen.dart';
 import 'package:chemical_app/features/norepinephrine/presentation/screens/norepinephrine_screen.dart';
 import 'package:chemical_app/features/map_pulse_pressure/presentation/screens/map_pulse_pressure_screen.dart';
+import 'package:chemical_app/features/urine_output_aki/presentation/screens/urine_output_aki_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -141,6 +142,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/map-pulse-pressure',
       builder: (context, state) => const MapPulsePressureScreen(),
+    ),
+    GoRoute(
+      path: '/urine-output-aki',
+      builder: (context, state) => const UrineOutputAkiScreen(),
     ),
   ],
 );
