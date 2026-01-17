@@ -107,6 +107,20 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/bmi-calculator'),
               ),
               _CalculatorCard(
+                title: 'Maintenance Calories',
+                icon: Icons.local_dining,
+                description:
+                    'Calculate daily caloric requirements and equivalent IV dextrose volumes for maintenance',
+                onTap: () => context.go('/maintenance-calories'),
+              ),
+              _CalculatorCard(
+                title: 'Bishop Score',
+                icon: Icons.pregnant_woman,
+                description:
+                    'Assess cervical favorability for induction of labor with evidence-based management guidance',
+                onTap: () => context.go('/bishop-score'),
+              ),
+              _CalculatorCard(
                 title: 'ATLS Shock Classification',
                 icon: Icons.emergency_outlined,
                 description:

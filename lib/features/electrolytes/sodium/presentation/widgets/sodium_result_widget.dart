@@ -81,7 +81,7 @@ class SodiumResultWidget extends StatelessWidget {
               ResultRow(
                 label: 'Volume of 3% Saline',
                 value: formatInteger(result.volumeOf3PercentNS),
-                unit: 'mL',
+                unit: 'mL/24hr',
                 isHighlighted: true,
               ),
             ],

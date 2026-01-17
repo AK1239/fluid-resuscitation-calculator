@@ -34,6 +34,8 @@ import 'package:chemical_app/features/renal_dose_adjustment/presentation/screens
 import 'package:chemical_app/features/egfr_calculator/presentation/screens/egfr_calculator_screen.dart';
 import 'package:chemical_app/features/atls_shock_classification/presentation/screens/atls_shock_classification_screen.dart';
 import 'package:chemical_app/features/bmi_calculator/presentation/screens/bmi_calculator_screen.dart';
+import 'package:chemical_app/features/bishop_score/presentation/screens/bishop_score_screen.dart';
+import 'package:chemical_app/features/maintenance_calories/presentation/screens/maintenance_calories_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -171,6 +173,14 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/bmi-calculator',
       builder: (context, state) => const BmiCalculatorScreen(),
+    ),
+    GoRoute(
+      path: '/bishop-score',
+      builder: (context, state) => const BishopScoreScreen(),
+    ),
+    GoRoute(
+      path: '/maintenance-calories',
+      builder: (context, state) => const MaintenanceCaloriesScreen(),
     ),
   ],
 );
