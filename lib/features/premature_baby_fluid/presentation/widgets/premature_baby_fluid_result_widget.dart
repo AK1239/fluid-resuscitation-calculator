@@ -46,7 +46,10 @@ class PrematureBabyFluidResultWidget extends StatelessWidget {
               const Divider(),
               ResultRow(
                 label: 'Calculated Baseline',
-                value: formatNumber(result.baselineFluidMlPerKgPerDay, decimals: 0),
+                value: formatNumber(
+                  result.baselineFluidMlPerKgPerDay,
+                  decimals: 0,
+                ),
                 unit: 'ml/kg/day',
                 isHighlighted: true,
               ),
@@ -64,7 +67,10 @@ class PrematureBabyFluidResultWidget extends StatelessWidget {
                 ),
                 ResultRow(
                   label: 'Calculated Enteral Volume',
-                  value: formatNumber(result.enteralVolumeMlPerDay, decimals: 0),
+                  value: formatNumber(
+                    result.enteralVolumeMlPerDay,
+                    decimals: 0,
+                  ),
                   unit: 'ml/day',
                   isHighlighted: false,
                 ),
@@ -85,38 +91,35 @@ class PrematureBabyFluidResultWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.tune,
-                    color: Colors.blue.shade700,
-                    size: 20,
-                  ),
+                  Icon(Icons.tune, color: Colors.blue.shade700, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     'Adjustments Applied',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade900,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              ...result.adjustmentsApplied.map((adjustment) => Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Row(
-                      children: [
-                        const Text('• ', style: TextStyle(fontSize: 16)),
-                        Expanded(
-                          child: Text(
-                            adjustment,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Colors.blue.shade900,
-                                ),
-                          ),
+              ...result.adjustmentsApplied.map(
+                (adjustment) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    children: [
+                      const Text('• ', style: TextStyle(fontSize: 16)),
+                      Expanded(
+                        child: Text(
+                          adjustment,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: Colors.blue.shade900),
                         ),
-                      ],
-                    ),
-                  )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -146,9 +149,9 @@ class PrematureBabyFluidResultWidget extends StatelessWidget {
                     child: Text(
                       'Fluid Requirements',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                 ],
@@ -156,13 +159,39 @@ class PrematureBabyFluidResultWidget extends StatelessWidget {
               const SizedBox(height: 16),
               ResultRow(
                 label: 'Total Fluid Goal',
-                value: formatNumber(result.totalAdjustedFluidMlPerDay, decimals: 0),
+                value: formatNumber(
+                  result.totalAdjustedFluidMlPerDay,
+                  decimals: 0,
+                ),
                 unit: 'ml/day',
                 isHighlighted: false,
               ),
+              if (result.canTakeEbm && result.enteralVolumeMlPerDay > 0) ...[
+                ResultRow(
+                  label: 'Enteral Volume',
+                  value: formatNumber(
+                    result.enteralVolumeMlPerDay,
+                    decimals: 0,
+                  ),
+                  unit: 'ml/day',
+                  isHighlighted: false,
+                ),
+                ResultRow(
+                  label: 'Breast Milk per Feed',
+                  value: formatNumber(
+                    result.enteralVolumeMlPerDay / 8,
+                    decimals: 1,
+                  ),
+                  unit: 'ml every 3 hours',
+                  isHighlighted: false,
+                ),
+              ],
               ResultRow(
                 label: 'Final IV Fluid Volume',
-                value: formatNumber(result.finalIvFluidVolumeMlPerDay, decimals: 0),
+                value: formatNumber(
+                  result.finalIvFluidVolumeMlPerDay,
+                  decimals: 0,
+                ),
                 unit: 'ml/day',
                 isHighlighted: true,
               ),
@@ -171,6 +200,12 @@ class PrematureBabyFluidResultWidget extends StatelessWidget {
                 value: formatNumber(result.ivRateMlPerHour, decimals: 1),
                 unit: 'ml/hour',
                 isHighlighted: true,
+              ),
+              const Divider(),
+              ResultRow(
+                label: 'Fluid Type',
+                value: result.fluidType == FluidType.d10 ? 'D10' : 'D10 0.2NS',
+                isHighlighted: false,
               ),
             ],
           ),
@@ -188,27 +223,23 @@ class PrematureBabyFluidResultWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.science,
-                    color: Colors.green.shade700,
-                    size: 20,
-                  ),
+                  Icon(Icons.science, color: Colors.green.shade700, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     'Fluid Composition',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green.shade900,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade900,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
                 result.fluidComposition,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.green.shade900,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.green.shade900),
               ),
             ],
           ),
@@ -236,31 +267,34 @@ class PrematureBabyFluidResultWidget extends StatelessWidget {
                     Text(
                       'Clinical Safety Notes',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.amber.shade900,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber.shade900,
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                ...result.safetyNotes.map((note) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('• ', style: TextStyle(fontSize: 16)),
-                          Expanded(
-                            child: Text(
-                              note,
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.amber.shade900,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
+                ...result.safetyNotes.map(
+                  (note) => Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('• ', style: TextStyle(fontSize: 16)),
+                        Expanded(
+                          child: Text(
+                            note,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Colors.amber.shade900,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
-                        ],
-                      ),
-                    )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

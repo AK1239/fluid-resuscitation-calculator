@@ -3,73 +3,72 @@ import 'package:chemical_app/features/premature_baby_fluid/domain/entities/prema
 /// Use case for calculating premature baby fluid requirements
 class CalculatePrematureBabyFluid {
   /// Data matrix for baseline fluid requirements (ml/kg/day)
-  static const Map<int, Map<GestationalCategory, double>> _baselineFluidMatrix = {
-    0: {
-      GestationalCategory.pretermLessThan1000g: 100,
-      GestationalCategory.pretermLessThan35wGreaterThan1000g: 80,
-      GestationalCategory.termNeonate: 60,
-    },
-    1: {
-      GestationalCategory.pretermLessThan1000g: 120,
-      GestationalCategory.pretermLessThan35wGreaterThan1000g: 100,
-      GestationalCategory.termNeonate: 80,
-    },
-    2: {
-      GestationalCategory.pretermLessThan1000g: 140,
-      GestationalCategory.pretermLessThan35wGreaterThan1000g: 120,
-      GestationalCategory.termNeonate: 100,
-    },
-    3: {
-      GestationalCategory.pretermLessThan1000g: 150,
-      GestationalCategory.pretermLessThan35wGreaterThan1000g: 140,
-      GestationalCategory.termNeonate: 120,
-    },
-    4: {
-      GestationalCategory.pretermLessThan1000g: 160,
-      GestationalCategory.pretermLessThan35wGreaterThan1000g: 160,
-      GestationalCategory.termNeonate: 140,
-    },
-    5: {
-      GestationalCategory.pretermLessThan1000g: 170, // Mid-range of 160-180
-      GestationalCategory.pretermLessThan35wGreaterThan1000g: 170, // Mid-range of 160-180
-      GestationalCategory.termNeonate: 155, // Mid-range of 150-160
-    },
-  };
+  static const Map<int, Map<GestationalCategory, double>> _baselineFluidMatrix =
+      {
+        0: {
+          GestationalCategory.pretermLessThan1000g: 100,
+          GestationalCategory.pretermLessThan35wGreaterThan1000g: 80,
+          GestationalCategory.termNeonate: 60,
+        },
+        1: {
+          GestationalCategory.pretermLessThan1000g: 120,
+          GestationalCategory.pretermLessThan35wGreaterThan1000g: 100,
+          GestationalCategory.termNeonate: 80,
+        },
+        2: {
+          GestationalCategory.pretermLessThan1000g: 140,
+          GestationalCategory.pretermLessThan35wGreaterThan1000g: 120,
+          GestationalCategory.termNeonate: 100,
+        },
+        3: {
+          GestationalCategory.pretermLessThan1000g: 150,
+          GestationalCategory.pretermLessThan35wGreaterThan1000g: 140,
+          GestationalCategory.termNeonate: 120,
+        },
+        4: {
+          GestationalCategory.pretermLessThan1000g: 160,
+          GestationalCategory.pretermLessThan35wGreaterThan1000g: 160,
+          GestationalCategory.termNeonate: 140,
+        },
+        5: {
+          GestationalCategory.pretermLessThan1000g: 170, // Mid-range of 160-180
+          GestationalCategory.pretermLessThan35wGreaterThan1000g:
+              170, // Mid-range of 160-180
+          GestationalCategory.termNeonate: 155, // Mid-range of 150-160
+        },
+      };
 
   /// Gets baseline fluid requirement from matrix
   double _getBaselineFluidMlPerKgPerDay({
     required int dayOfLife,
     required GestationalCategory category,
   }) {
-    // Day 6+ uses day 5 values (or day 5 range midpoints)
-    final day = dayOfLife >= 6 ? 5 : dayOfLife;
-
-    if (day == 5) {
-      // Use mid-range values for day 5
-      switch (category) {
-        case GestationalCategory.pretermLessThan1000g:
-          return 170; // Mid-range of 160-180
-        case GestationalCategory.pretermLessThan35wGreaterThan1000g:
-          return 170; // Mid-range of 160-180
-        case GestationalCategory.termNeonate:
-          return 155; // Mid-range of 150-160
-      }
-    }
-
-    // Day 6+ specific values
+    // Day 6+ uses specific values (same for day 6 and all subsequent days)
     if (dayOfLife >= 6) {
       switch (category) {
         case GestationalCategory.pretermLessThan1000g:
-          return 160;
+          return 160; // Day 6+ specific value
         case GestationalCategory.pretermLessThan35wGreaterThan1000g:
-          return 155; // Mid-range of 150-160
+          return 155; // Mid-range of 150-160 for Day 6+
         case GestationalCategory.termNeonate:
-          return 150;
+          return 150; // Day 6+ specific value
+      }
+    }
+
+    // Day 5 uses mid-range values
+    if (dayOfLife == 5) {
+      switch (category) {
+        case GestationalCategory.pretermLessThan1000g:
+          return 170; // Mid-range of 160-180
+        case GestationalCategory.pretermLessThan35wGreaterThan1000g:
+          return 170; // Mid-range of 160-180
+        case GestationalCategory.termNeonate:
+          return 155; // Mid-range of 150-160
       }
     }
 
     // Days 0-4 from matrix
-    final dayMatrix = _baselineFluidMatrix[day];
+    final dayMatrix = _baselineFluidMatrix[dayOfLife];
     if (dayMatrix != null) {
       return dayMatrix[category] ?? 0;
     }
@@ -111,10 +110,8 @@ class CalculatePrematureBabyFluid {
     required bool hasCerebralEdema,
     required bool hasMultiOrganDamage,
   }) {
-    final hasAnyCondition = hasSevereHie ||
-        hasAki ||
-        hasCerebralEdema ||
-        hasMultiOrganDamage;
+    final hasAnyCondition =
+        hasSevereHie || hasAki || hasCerebralEdema || hasMultiOrganDamage;
 
     if (hasAnyCondition) {
       // Use mid-range: 15% (between 10-20%)
@@ -159,12 +156,6 @@ class CalculatePrematureBabyFluid {
       dayOfLife: dayOfLife,
     );
 
-    // 3. Calculate enteral volume
-    final enteralVolumeMlPerDay = _calculateEnteralVolumeMlPerDay(
-      ebmMlPerKgPerDay: ebmMlPerKgPerDay,
-      birthWeightKg: currentWeightKg,
-    );
-
     // 4. Get adjustments
     final clinicalRestrictionPercent = _getClinicalRestrictionPercent(
       hasSevereHie: hasSevereHie,
@@ -193,15 +184,30 @@ class CalculatePrematureBabyFluid {
     final totalAdjustedFluidMlPerDay =
         totalFluidMlPerKgPerDay * currentWeightKg;
 
+    // 3. Calculate enteral volume (after total fluid is calculated)
+    var enteralVolumeMlPerDay = _calculateEnteralVolumeMlPerDay(
+      ebmMlPerKgPerDay: ebmMlPerKgPerDay,
+      birthWeightKg: currentWeightKg,
+    );
+
+    // Cap enteral volume at total fluid goal (enteral cannot exceed total fluid)
+    if (enteralVolumeMlPerDay > totalAdjustedFluidMlPerDay) {
+      enteralVolumeMlPerDay = totalAdjustedFluidMlPerDay;
+    }
+
     // 6. Calculate final IV fluid volume (subtract enteral feeds)
     final finalIvFluidVolumeMlPerDay =
-        (totalAdjustedFluidMlPerDay - enteralVolumeMlPerDay).clamp(0.0, double.infinity);
+        (totalAdjustedFluidMlPerDay - enteralVolumeMlPerDay).clamp(
+          0.0,
+          double.infinity,
+        );
 
     // 7. Calculate IV rate (ml/hour)
     final ivRateMlPerHour = finalIvFluidVolumeMlPerDay / 24;
 
     // 8. Determine fluid type
-    final fluidType = dayOfLife == 0 ? FluidType.d10w : FluidType.d10_02ns;
+    // Day 0-2: D10, Day 3+: D10 0.2NS
+    final fluidType = dayOfLife <= 2 ? FluidType.d10 : FluidType.d10_02ns;
 
     // 9. Build fluid composition description
     final fluidComposition = _getFluidComposition(fluidType);
@@ -230,7 +236,8 @@ class CalculatePrematureBabyFluid {
     // 11. Build safety notes
     final safetyNotes = <String>[];
     if (gestationalCategory == GestationalCategory.pretermLessThan1000g ||
-        gestationalCategory == GestationalCategory.pretermLessThan35wGreaterThan1000g) {
+        gestationalCategory ==
+            GestationalCategory.pretermLessThan35wGreaterThan1000g) {
       safetyNotes.add(
         'PDA Warning: Fluid overload increases the risk of Patent Ductus Arteriosus in premature infants.',
       );
@@ -271,8 +278,8 @@ class CalculatePrematureBabyFluid {
 
   String _getFluidComposition(FluidType fluidType) {
     switch (fluidType) {
-      case FluidType.d10w:
-        return 'D10W (10% Dextrose in Water)';
+      case FluidType.d10:
+        return 'D10 (10% Dextrose in Water)';
       case FluidType.d10_02ns:
         return 'D10 0.2NS (10% Dextrose in ¼ Normal Saline)\n'
             'Mixing instructions per 100 mL:\n'

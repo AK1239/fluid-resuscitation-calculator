@@ -57,14 +57,10 @@ enum GestationalCategory {
 }
 
 /// Environment type
-enum Environment {
-  none,
-  phototherapy,
-  radiantWarmer,
-}
+enum Environment { none, phototherapy, radiantWarmer }
 
 /// Fluid type
 enum FluidType {
-  d10w, // Day 0
-  d10_02ns, // Day 1+
+  d10, // Day 0-2
+  d10_02ns, // Day 3+ (D10 0.2NS)
 }
