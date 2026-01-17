@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:chemical_app/core/widgets/custom_text_field.dart';
-import 'package:chemical_app/core/utils/validators.dart';
 import 'package:chemical_app/features/bmi_calculator/presentation/providers/bmi_providers.dart';
 import 'package:chemical_app/features/bmi_calculator/presentation/widgets/bmi_result_widget.dart';
 
@@ -125,9 +124,9 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
               const SizedBox(height: 8),
               Text(
                 'Calculate Body Mass Index using weight and height',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[600],
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
               ),
               const SizedBox(height: 24),
               // Weight unit selector
@@ -141,7 +140,9 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
                   ButtonSegment(value: 'kg', label: Text('kg')),
                   ButtonSegment(value: 'lb', label: Text('lb')),
                 ],
-                selected: {if (formState.weightUnit != null) formState.weightUnit!},
+                selected: {
+                  if (formState.weightUnit != null) formState.weightUnit!,
+                },
                 emptySelectionAllowed: true,
                 onSelectionChanged: (Set<String> selected) {
                   formNotifier.setWeightUnit(selected.firstOrNull);
@@ -169,7 +170,9 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
                   ButtonSegment(value: 'm', label: Text('m')),
                   ButtonSegment(value: 'ft/in', label: Text('ft/in')),
                 ],
-                selected: {if (formState.heightUnit != null) formState.heightUnit!},
+                selected: {
+                  if (formState.heightUnit != null) formState.heightUnit!,
+                },
                 emptySelectionAllowed: true,
                 onSelectionChanged: (Set<String> selected) {
                   formNotifier.setHeightUnit(selected.firstOrNull);
@@ -192,7 +195,8 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
                   label: 'Height (Inches)',
                   unit: 'in',
                   controller: _heightInchesController,
-                  validator: (value) => _validateHeightInches(value, formState.heightUnit),
+                  validator: (value) =>
+                      _validateHeightInches(value, formState.heightUnit),
                   onChanged: (value) => formNotifier.setHeightInches(value),
                 ),
               ] else ...[
@@ -225,7 +229,8 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
                         const SizedBox(width: 8),
                         Text(
                           'About This Calculator',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue.shade900,
                               ),
@@ -236,8 +241,8 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
                     Text(
                       'This calculator uses the Body Mass Index (BMI) formula: BMI = weight (kg) ÷ [height (m)]². Units are automatically converted as needed. BMI is classified according to WHO guidelines.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.blue.shade900,
-                          ),
+                        color: Colors.blue.shade900,
+                      ),
                     ),
                   ],
                 ),

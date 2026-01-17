@@ -69,7 +69,6 @@ class BmiResultWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryColor = _getBmiCategoryColor();
-    final isAbnormal = result.category != BmiCategory.normalWeight;
 
     return Column(
       children: [
@@ -100,19 +99,15 @@ class BmiResultWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8, bottom: 8),
                 child: Row(
                   children: [
-                    Icon(
-                      _getBmiCategoryIcon(),
-                      color: categoryColor,
-                      size: 20,
-                    ),
+                    Icon(_getBmiCategoryIcon(), color: categoryColor, size: 20),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         _getBmiCategoryText(),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: categoryColor,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          color: categoryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
@@ -134,19 +129,15 @@ class BmiResultWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    _getBmiCategoryIcon(),
-                    color: categoryColor,
-                    size: 24,
-                  ),
+                  Icon(_getBmiCategoryIcon(), color: categoryColor, size: 24),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       'BMI Interpretation',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: categoryColor,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: categoryColor,
+                      ),
                     ),
                   ),
                 ],
@@ -155,9 +146,9 @@ class BmiResultWidget extends StatelessWidget {
               Text(
                 result.interpretation,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: categoryColor,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  color: categoryColor,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -184,9 +175,9 @@ class BmiResultWidget extends StatelessWidget {
                   Text(
                     'Worked Example',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade900,
+                    ),
                   ),
                 ],
               ),
@@ -194,9 +185,9 @@ class BmiResultWidget extends StatelessWidget {
               Text(
                 _getWorkedExampleText(),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.blue.shade900,
-                      fontFamily: 'monospace',
-                    ),
+                  color: Colors.blue.shade900,
+                  fontFamily: 'monospace',
+                ),
               ),
             ],
           ),
@@ -223,9 +214,9 @@ class BmiResultWidget extends StatelessWidget {
                   Text(
                     'BMI Formula',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade900,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade900,
+                    ),
                   ),
                 ],
               ),
@@ -233,17 +224,17 @@ class BmiResultWidget extends StatelessWidget {
               Text(
                 'BMI = weight (kg) ÷ [height (m)]²',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey.shade900,
-                      fontFamily: 'monospace',
-                    ),
+                  color: Colors.grey.shade900,
+                  fontFamily: 'monospace',
+                ),
               ),
               const SizedBox(height: 8),
               Text(
                 'WHO Classification:',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade900,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey.shade900,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
@@ -253,9 +244,9 @@ class BmiResultWidget extends StatelessWidget {
                 '• 30.0 - 34.9 → Obesity Class I\n'
                 '• 35.0 - 39.9 → Obesity Class II\n'
                 '• ≥ 40.0 → Obesity Class III',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey.shade900,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.grey.shade900),
               ),
             ],
           ),
@@ -280,9 +271,9 @@ class BmiResultWidget extends StatelessWidget {
                 child: Text(
                   'BMI is a screening tool and does not directly measure body fat. Clinical judgment and additional assessments should be used for comprehensive evaluation.',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey.shade700,
-                        fontStyle: FontStyle.italic,
-                      ),
+                    color: Colors.grey.shade700,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ),
             ],

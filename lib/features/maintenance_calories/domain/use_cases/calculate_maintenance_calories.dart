@@ -3,7 +3,7 @@ import 'package:chemical_app/features/maintenance_calories/domain/entities/maint
 /// Use case for calculating maintenance calories
 class CalculateMaintenanceCalories {
   // Constants
-  static const double kcalPerGramDextrose = 4.0; // 1 g dextrose = 4 kcal
+  static const double kcalPerGramDextrose = 3.4; // 1 g dextrose = 3.4 kcal
   static const double gramsDextrosePerLDns = 50.0; // DNS: 1 L = 50 g dextrose
   static const double gramsDextrosePerLD5 = 50.0; // D5: 1 L = 50 g dextrose
   static const double gramsDextrosePerLD10 = 100.0; // D10: 1 L = 100 g dextrose
