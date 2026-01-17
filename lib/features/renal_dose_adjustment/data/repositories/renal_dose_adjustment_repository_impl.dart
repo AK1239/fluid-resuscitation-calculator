@@ -17,6 +17,7 @@ class RenalDoseAdjustmentRepositoryImpl {
     required double weightKg,
     required double serumCreatinineUmolPerL,
     required double standardDose,
+    required double standardInterval,
   }) {
     return _calculateRenalDoseAdjustment.execute(
       age: age,
@@ -24,6 +25,7 @@ class RenalDoseAdjustmentRepositoryImpl {
       weightKg: weightKg,
       serumCreatinineUmolPerL: serumCreatinineUmolPerL,
       standardDose: standardDose,
+      standardInterval: standardInterval,
     );
   }
 }

@@ -29,6 +29,7 @@ class _AtlsShockClassificationScreenState
   late final TextEditingController _bloodLossPercentController;
   late final TextEditingController _bloodLossMlController;
   final _formKey = GlobalKey<FormState>();
+  final _weightFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -59,6 +60,7 @@ class _AtlsShockClassificationScreenState
     _baseDeficitController.dispose();
     _bloodLossPercentController.dispose();
     _bloodLossMlController.dispose();
+    _weightFocusNode.dispose();
     super.dispose();
   }
 
@@ -100,11 +102,11 @@ class _AtlsShockClassificationScreenState
     final result = ref.watch(atlsShockResultProvider);
     final formNotifier = ref.read(atlsShockFormProvider.notifier);
 
-    // Sync controllers with state
+    // Sync controllers with state (only when not focused to avoid interfering with editing)
     if (_ageController.text != (formState.age ?? '')) {
       _ageController.text = formState.age ?? '';
     }
-    if (_weightController.text != (formState.weightKg ?? '')) {
+    if (!_weightFocusNode.hasFocus && _weightController.text != (formState.weightKg ?? '')) {
       _weightController.text = formState.weightKg ?? '';
     }
     if (_systolicBpController.text != (formState.systolicBp ?? '')) {
@@ -183,6 +185,7 @@ class _AtlsShockClassificationScreenState
                 label: 'Weight',
                 unit: 'kg',
                 controller: _weightController,
+                focusNode: _weightFocusNode,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return null; // Optional, defaults to 70 kg
@@ -249,7 +252,6 @@ class _AtlsShockClassificationScreenState
                 unit: 'bpm',
                 controller: _heartRateController,
                 validator: validateHeartRate,
-                hintText: 'Optional',
                 onChanged: (value) =>
                     formNotifier.setHeartRate(value.isEmpty ? null : value),
               ),

@@ -113,9 +113,9 @@ class ShockIndexResultWidget extends StatelessWidget {
                   child: Text(
                     'Normal range: 60-100 bpm (adults at rest)',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
-                          fontStyle: FontStyle.italic,
-                        ),
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
               ),
@@ -133,9 +133,9 @@ class ShockIndexResultWidget extends StatelessWidget {
                   child: Text(
                     'Normal range: 90-120 mmHg',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
-                          fontStyle: FontStyle.italic,
-                        ),
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
               ),
@@ -159,9 +159,9 @@ class ShockIndexResultWidget extends StatelessWidget {
                   child: Text(
                     'Normal range: < 0.5',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
-                          fontStyle: FontStyle.italic,
-                        ),
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
               ),
@@ -228,9 +228,9 @@ class ShockIndexResultWidget extends StatelessWidget {
                     child: Text(
                       'Normal range: < 40',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                            fontStyle: FontStyle.italic,
-                          ),
+                        color: Colors.grey[600],
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
                   ),
                 ),

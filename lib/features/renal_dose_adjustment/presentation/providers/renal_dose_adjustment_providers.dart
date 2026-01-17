@@ -15,6 +15,7 @@ class RenalDoseAdjustmentFormState {
   final String? weightKg;
   final String? serumCreatinine;
   final String? standardDose;
+  final String? standardInterval;
 
   const RenalDoseAdjustmentFormState({
     this.age,
@@ -22,6 +23,7 @@ class RenalDoseAdjustmentFormState {
     this.weightKg,
     this.serumCreatinine,
     this.standardDose,
+    this.standardInterval,
   });
 
   RenalDoseAdjustmentFormState copyWith({
@@ -30,6 +32,7 @@ class RenalDoseAdjustmentFormState {
     String? weightKg,
     String? serumCreatinine,
     String? standardDose,
+    String? standardInterval,
   }) {
     return RenalDoseAdjustmentFormState(
       age: age ?? this.age,
@@ -37,6 +40,7 @@ class RenalDoseAdjustmentFormState {
       weightKg: weightKg ?? this.weightKg,
       serumCreatinine: serumCreatinine ?? this.serumCreatinine,
       standardDose: standardDose ?? this.standardDose,
+      standardInterval: standardInterval ?? this.standardInterval,
     );
   }
 
@@ -49,7 +53,9 @@ class RenalDoseAdjustmentFormState {
         serumCreatinine == null ||
         serumCreatinine!.isEmpty ||
         standardDose == null ||
-        standardDose!.isEmpty) {
+        standardDose!.isEmpty ||
+        standardInterval == null ||
+        standardInterval!.isEmpty) {
       return false;
     }
 
@@ -57,8 +63,9 @@ class RenalDoseAdjustmentFormState {
     final weight = double.tryParse(weightKg!);
     final creatinine = double.tryParse(serumCreatinine!);
     final dose = double.tryParse(standardDose!);
+    final interval = double.tryParse(standardInterval!);
 
-    if (ageValue == null || weight == null || creatinine == null || dose == null) {
+    if (ageValue == null || weight == null || creatinine == null || dose == null || interval == null) {
       return false;
     }
 
@@ -73,6 +80,9 @@ class RenalDoseAdjustmentFormState {
       return false;
     }
     if (dose <= 0) {
+      return false;
+    }
+    if (interval <= 0) {
       return false;
     }
 
@@ -105,6 +115,10 @@ class RenalDoseAdjustmentFormNotifier
     state = state.copyWith(standardDose: standardDose);
   }
 
+  void setStandardInterval(String? standardInterval) {
+    state = state.copyWith(standardInterval: standardInterval);
+  }
+
   void reset() {
     state = const RenalDoseAdjustmentFormState();
   }
@@ -132,6 +146,7 @@ final renalDoseAdjustmentResultProvider =
     final weightKg = double.parse(formState.weightKg!);
     final serumCreatinine = double.parse(formState.serumCreatinine!);
     final standardDose = double.parse(formState.standardDose!);
+    final standardInterval = double.parse(formState.standardInterval!);
 
     return repository.calculate(
       age: age,
@@ -139,6 +154,7 @@ final renalDoseAdjustmentResultProvider =
       weightKg: weightKg,
       serumCreatinineUmolPerL: serumCreatinine,
       standardDose: standardDose,
+      standardInterval: standardInterval,
     );
   } catch (e) {
     return null;

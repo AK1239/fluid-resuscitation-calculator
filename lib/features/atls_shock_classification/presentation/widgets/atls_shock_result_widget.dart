@@ -73,7 +73,8 @@ class AtlsShockResultWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSevere = result.shockClass == AtlsShockClass.class3 ||
+    final isSevere =
+        result.shockClass == AtlsShockClass.class3 ||
         result.shockClass == AtlsShockClass.class4;
 
     return Column(
@@ -83,10 +84,7 @@ class AtlsShockResultWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: _getShockClassColor().withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _getShockClassColor(),
-              width: 3,
-            ),
+            border: Border.all(color: _getShockClassColor(), width: 3),
           ),
           child: Column(
             children: [
@@ -104,7 +102,8 @@ class AtlsShockResultWidget extends StatelessWidget {
                     children: [
                       Text(
                         'ATLS ${_getShockClassText()}',
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: _getShockClassColor(),
                             ),
@@ -112,9 +111,9 @@ class AtlsShockResultWidget extends StatelessWidget {
                       Text(
                         _getSeverityLabel(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: _getShockClassColor(),
-                              fontWeight: FontWeight.w500,
-                            ),
+                          color: _getShockClassColor(),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
@@ -168,22 +167,24 @@ class AtlsShockResultWidget extends StatelessWidget {
                     Text(
                       'Parameters That Drove Classification',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade900,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade900,
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                ...result.parametersThatDroveEscalation.map((param) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        '• $param',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.blue.shade900,
-                            ),
+                ...result.parametersThatDroveEscalation.map(
+                  (param) => Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      '• $param',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.blue.shade900,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -210,18 +211,18 @@ class AtlsShockResultWidget extends StatelessWidget {
                   Text(
                     'Physiologic Interpretation',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purple.shade900,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.purple.shade900,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
                 result.physiologicInterpretation,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.purple.shade900,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.purple.shade900),
               ),
             ],
           ),
@@ -245,30 +246,35 @@ class AtlsShockResultWidget extends StatelessWidget {
                     size: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'Initial ATLS Fluid Strategy',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange.shade900,
-                        ),
+                  Expanded(
+                    child: Text(
+                      'Initial ATLS Fluid Strategy',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange.shade900,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.shade200,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      'Educational guidance only',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.orange.shade900,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                          ),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade200,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        'Educational guidance only',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.orange.shade900,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ],
@@ -277,9 +283,9 @@ class AtlsShockResultWidget extends StatelessWidget {
               Text(
                 _getFluidStrategy(),
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.orange.shade900,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  color: Colors.orange.shade900,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               if (isSevere) ...[
                 const SizedBox(height: 8),
@@ -289,8 +295,8 @@ class AtlsShockResultWidget extends StatelessWidget {
                   '• Consider blood products early\n'
                   '• Prepare for potential massive transfusion',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.orange.shade900,
-                      ),
+                    color: Colors.orange.shade900,
+                  ),
                 ),
               ],
             ],
@@ -316,9 +322,9 @@ class AtlsShockResultWidget extends StatelessWidget {
                 child: Text(
                   'This tool supports clinical reasoning but does not replace ATLS-trained provider judgment.',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey.shade700,
-                        fontStyle: FontStyle.italic,
-                      ),
+                    color: Colors.grey.shade700,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ),
             ],

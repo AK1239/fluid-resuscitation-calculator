@@ -42,45 +42,56 @@ class CalculateRenalDoseAdjustment {
       return RenalFunctionStage.moderateImpairment;
     } else if (crCl >= 15) {
       return RenalFunctionStage.severeImpairment;
+    } else if (crCl >= 10) {
+      return RenalFunctionStage.kidneyFailure;
     } else {
       return RenalFunctionStage.kidneyFailure;
     }
   }
 
-  /// Gets dose adjustment guidance based on renal function stage
-  String _getDoseAdjustmentGuidance(RenalFunctionStage stage) {
-    switch (stage) {
-      case RenalFunctionStage.normal:
-        return 'No dose adjustment needed. Standard dose appropriate.';
-      case RenalFunctionStage.mildImpairment:
-        return 'Mild renal impairment. Consider 75-100% of standard dose. Monitor for drug accumulation.';
-      case RenalFunctionStage.moderateImpairment:
-        return 'Moderate renal impairment. Reduce dose to 50-75% of standard dose or extend dosing interval.';
-      case RenalFunctionStage.severeImpairment:
-        return 'Severe renal impairment. Reduce dose to 25-50% of standard dose or significantly extend dosing interval.';
-      case RenalFunctionStage.kidneyFailure:
-        return 'Kidney failure (CrCl < 15). Use 25% of standard dose or avoid if contraindicated. Consider alternative medications.';
+  /// Gets dose adjustment guidance based on CrCl
+  String _getDoseAdjustmentGuidance(
+    double crCl,
+    double standardDose,
+    double? adjustedDose,
+    double standardInterval,
+    double? adjustedInterval,
+  ) {
+    if (crCl >= 90) {
+      return 'No dose adjustment needed. Standard dose appropriate.';
+    } else if (crCl < 10) {
+      return 'Severe kidney failure (CrCl < 10 mL/min). Consider dialysis-dependent dosing or alternative medications. Consult nephrology.';
+    } else if (adjustedDose != null && adjustedInterval != null) {
+      final dosePercent = ((adjustedDose / standardDose) * 100).toStringAsFixed(0);
+      return 'Renal impairment detected. Consider dose reduction to ${adjustedDose.toStringAsFixed(0)} mg (${dosePercent}% of standard) or extend interval to ${adjustedInterval.toStringAsFixed(1)} hours. Therapeutic drug monitoring recommended.';
+    } else if (adjustedInterval != null) {
+      return 'Renal impairment detected. Consider extending dosing interval to ${adjustedInterval.toStringAsFixed(1)} hours. Therapeutic drug monitoring recommended.';
+    } else {
+      return 'Renal impairment detected. Dose adjustment recommended based on CrCl. Consult drug-specific dosing guidelines.';
     }
   }
 
-  /// Calculates adjusted dose based on renal function
-  /// This is a general guideline; specific drugs may have different recommendations
-  double? _calculateAdjustedDose(
-    double standardDose,
-    RenalFunctionStage stage,
-  ) {
-    switch (stage) {
-      case RenalFunctionStage.normal:
-        return null; // No adjustment needed
-      case RenalFunctionStage.mildImpairment:
-        return (standardDose * 0.875).roundToDouble(); // ~87.5% (midpoint of 75-100%)
-      case RenalFunctionStage.moderateImpairment:
-        return (standardDose * 0.625).roundToDouble(); // ~62.5% (midpoint of 50-75%)
-      case RenalFunctionStage.severeImpairment:
-        return (standardDose * 0.375).roundToDouble(); // ~37.5% (midpoint of 25-50%)
-      case RenalFunctionStage.kidneyFailure:
-        return (standardDose * 0.25).roundToDouble(); // 25%
+  /// Calculates adjusted dose using proportional formula: Adjusted dose = Standard dose × (CrCl / 100)
+  double? _calculateAdjustedDose(double standardDose, double crCl) {
+    if (crCl >= 90) {
+      return null; // No adjustment needed for normal renal function
     }
+    // Use proportional formula
+    final adjusted = standardDose * (crCl / 100);
+    return adjusted > 0 ? adjusted : null;
+  }
+
+  /// Calculates adjusted interval using proportional formula: Adjusted interval = Standard interval × (100 / CrCl)
+  double? _calculateAdjustedInterval(double standardInterval, double crCl) {
+    if (crCl >= 90) {
+      return null; // No adjustment needed for normal renal function
+    }
+    if (crCl <= 0) {
+      return null; // Cannot calculate if CrCl is 0 or negative
+    }
+    // Use proportional formula
+    final adjusted = standardInterval * (100 / crCl);
+    return adjusted > 0 ? adjusted : null;
   }
 
   /// Executes the calculation
@@ -90,6 +101,7 @@ class CalculateRenalDoseAdjustment {
     required double weightKg,
     required double serumCreatinineUmolPerL,
     required double standardDose,
+    required double standardInterval,
   }) {
     // Convert creatinine to mg/dL
     final serumCreatinineMgPerDl =
@@ -109,11 +121,23 @@ class CalculateRenalDoseAdjustment {
     // Determine renal function stage
     final stage = _determineRenalFunctionStage(roundedCrCl);
 
-    // Get dose adjustment guidance
-    final guidance = _getDoseAdjustmentGuidance(stage);
+    // Calculate adjusted dose using proportional formula
+    final adjustedDose = _calculateAdjustedDose(standardDose, roundedCrCl);
 
-    // Calculate adjusted dose
-    final adjustedDose = _calculateAdjustedDose(standardDose, stage);
+    // Calculate adjusted interval using proportional formula
+    final adjustedInterval = _calculateAdjustedInterval(standardInterval, roundedCrCl);
+
+    // Check if CrCl < 10 mL/min (requires dialysis consideration)
+    final requiresDialysis = roundedCrCl < 10;
+
+    // Get dose adjustment guidance
+    final guidance = _getDoseAdjustmentGuidance(
+      roundedCrCl,
+      standardDose,
+      adjustedDose,
+      standardInterval,
+      adjustedInterval,
+    );
 
     return RenalDoseAdjustmentResult(
       age: age,
@@ -122,10 +146,13 @@ class CalculateRenalDoseAdjustment {
       serumCreatinine: serumCreatinineUmolPerL,
       serumCreatinineMgPerDl: serumCreatinineMgPerDl,
       standardDose: standardDose,
+      standardInterval: standardInterval,
       creatinineClearance: roundedCrCl,
       renalFunctionStage: stage,
       adjustedDose: adjustedDose,
+      adjustedInterval: adjustedInterval,
       doseAdjustmentGuidance: guidance,
+      requiresDialysis: requiresDialysis,
     );
   }
 }

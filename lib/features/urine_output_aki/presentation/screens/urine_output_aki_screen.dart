@@ -20,7 +20,7 @@ class _UrineOutputAkiScreenState extends ConsumerState<UrineOutputAkiScreen> {
   late final TextEditingController _previousVolumeController;
   late final TextEditingController _weightController;
   final _formKey = GlobalKey<FormState>();
-  
+
   // Track which fields have been interacted with
   bool _currentVolumeTouched = false;
   bool _previousVolumeTouched = false;
@@ -209,7 +209,9 @@ class _UrineOutputAkiScreenState extends ConsumerState<UrineOutputAkiScreen> {
                 label: 'Current Urine Volume',
                 unit: 'mL',
                 controller: _currentVolumeController,
-                validator: _currentVolumeTouched ? _validateCurrentVolume : null,
+                validator: _currentVolumeTouched
+                    ? _validateCurrentVolume
+                    : null,
                 onChanged: (value) {
                   if (!_currentVolumeTouched) {
                     setState(() {

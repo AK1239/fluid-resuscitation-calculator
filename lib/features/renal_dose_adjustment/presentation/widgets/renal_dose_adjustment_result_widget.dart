@@ -108,6 +108,13 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
                 unit: 'mg',
                 isHighlighted: false,
               ),
+              const Divider(),
+              ResultRow(
+                label: 'Standard Interval',
+                value: formatNumber(result.standardInterval, decimals: 1),
+                unit: 'hours',
+                isHighlighted: false,
+              ),
               if (result.adjustedDose != null) ...[
                 const Divider(),
                 ResultRow(
@@ -117,9 +124,64 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
                   isHighlighted: true,
                 ),
               ],
+              if (result.adjustedInterval != null) ...[
+                const Divider(),
+                ResultRow(
+                  label: 'Adjusted Interval',
+                  value: formatNumber(result.adjustedInterval!, decimals: 1),
+                  unit: 'hours',
+                  isHighlighted: true,
+                ),
+              ],
             ],
           ),
         ),
+        if (result.requiresDialysis) ...[
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.red.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.red.shade700,
+                width: 2,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: Colors.red.shade700,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Critical Alert: CrCl < 10 mL/min',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red.shade900,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Severe kidney failure detected. Patient may require dialysis-dependent dosing or alternative medications. Consult nephrology before proceeding.',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.red.shade900,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ],
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),

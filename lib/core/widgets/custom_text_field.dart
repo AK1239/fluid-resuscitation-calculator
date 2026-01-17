@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool enabled;
   final String? hintText;
+  final FocusNode? focusNode;
 
   const CustomTextField({
     super.key,
@@ -23,6 +24,7 @@ class CustomTextField extends StatelessWidget {
     this.onTap,
     this.enabled = true,
     this.hintText,
+    this.focusNode,
   });
 
   @override
@@ -47,6 +49,7 @@ class CustomTextField extends StatelessWidget {
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
+          focusNode: focusNode,
           validator: validator,
           keyboardType: keyboardType ?? TextInputType.number,
           onChanged: onChanged,

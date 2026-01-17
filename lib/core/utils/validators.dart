@@ -507,6 +507,24 @@ String? validateStandardDose(String? value) {
   return null;
 }
 
+/// Validates standard dosing interval in hours
+String? validateStandardInterval(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Standard interval is required';
+  }
+  final interval = double.tryParse(value);
+  if (interval == null) {
+    return 'Please enter a valid number';
+  }
+  if (interval <= 0) {
+    return 'Interval must be greater than 0';
+  }
+  if (interval > 168) {
+    return 'Interval seems unrealistic (max 168 hours = 1 week)';
+  }
+  return null;
+}
+
 /// Validates cystatin C in mg/L (optional field)
 String? validateCystatinC(String? value) {
   if (value == null || value.isEmpty) {

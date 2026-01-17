@@ -20,6 +20,7 @@ class _RenalDoseAdjustmentScreenState
   late final TextEditingController _weightController;
   late final TextEditingController _creatinineController;
   late final TextEditingController _standardDoseController;
+  late final TextEditingController _standardIntervalController;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,6 +30,7 @@ class _RenalDoseAdjustmentScreenState
     _weightController = TextEditingController();
     _creatinineController = TextEditingController();
     _standardDoseController = TextEditingController();
+    _standardIntervalController = TextEditingController();
   }
 
   @override
@@ -37,6 +39,7 @@ class _RenalDoseAdjustmentScreenState
     _weightController.dispose();
     _creatinineController.dispose();
     _standardDoseController.dispose();
+    _standardIntervalController.dispose();
     super.dispose();
   }
 
@@ -58,6 +61,9 @@ class _RenalDoseAdjustmentScreenState
     }
     if (_standardDoseController.text != (formState.standardDose ?? '')) {
       _standardDoseController.text = formState.standardDose ?? '';
+    }
+    if (_standardIntervalController.text != (formState.standardInterval ?? '')) {
+      _standardIntervalController.text = formState.standardInterval ?? '';
     }
 
     return Scaffold(
@@ -147,6 +153,14 @@ class _RenalDoseAdjustmentScreenState
                 controller: _standardDoseController,
                 validator: validateStandardDose,
                 onChanged: (value) => formNotifier.setStandardDose(value),
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Standard Dosing Interval',
+                unit: 'hours',
+                controller: _standardIntervalController,
+                validator: validateStandardInterval,
+                onChanged: (value) => formNotifier.setStandardInterval(value),
               ),
               const SizedBox(height: 24),
               Container(
