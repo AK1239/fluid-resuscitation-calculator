@@ -60,43 +60,57 @@ class HomeScreen extends StatelessWidget {
               _CalculatorCard(
                 title: 'Norepinephrine Infusion',
                 icon: Icons.medication_liquid,
-                description: 'Calculate norepinephrine infusion dosing and rate',
+                description:
+                    'Calculate norepinephrine infusion dosing and rate',
                 onTap: () => context.go('/norepinephrine'),
               ),
               _CalculatorCard(
                 title: 'MAP & Pulse Pressure',
                 icon: Icons.favorite,
-                description: 'Calculate Mean Arterial Pressure and Pulse Pressure with clinical interpretation',
+                description:
+                    'Calculate Mean Arterial Pressure and Pulse Pressure with clinical interpretation',
                 onTap: () => context.go('/map-pulse-pressure'),
               ),
               _CalculatorCard(
                 title: 'Urine Output & AKI Staging',
                 icon: Icons.water_drop_outlined,
-                description: 'Calculate urine output and KDIGO AKI staging based on urine volume measurements',
+                description:
+                    'Calculate urine output and KDIGO AKI staging based on urine volume measurements',
                 onTap: () => context.go('/urine-output-aki'),
               ),
               _CalculatorCard(
                 title: 'Shock Index Calculator',
                 icon: Icons.emergency,
-                description: 'Calculate Shock Index (SI) and Trauma-Adjusted Shock Index (TASI) with risk stratification',
+                description:
+                    'Calculate Shock Index (SI) and Trauma-Adjusted Shock Index (TASI) with risk stratification',
                 onTap: () => context.go('/shock-index'),
               ),
               _CalculatorCard(
-                title: 'Renal Dose Adjustment',
+                title: 'Creatinine Clearance',
                 icon: Icons.medication,
-                description: 'Calculate creatinine clearance and determine drug dose adjustments for renal impairment',
+                description:
+                    'Calculate creatinine clearance and determine drug dose adjustments for renal impairment',
                 onTap: () => context.go('/renal-dose-adjustment'),
               ),
               _CalculatorCard(
                 title: 'eGFR Calculator',
                 icon: Icons.health_and_safety,
-                description: 'Estimate Glomerular Filtration Rate using CKD-EPI equations with CKD stage classification',
+                description:
+                    'Estimate Glomerular Filtration Rate using CKD-EPI equations with CKD stage classification',
                 onTap: () => context.go('/egfr-calculator'),
+              ),
+              _CalculatorCard(
+                title: 'BMI Calculator',
+                icon: Icons.monitor_weight,
+                description:
+                    'Calculate Body Mass Index with WHO classification and clinical interpretation',
+                onTap: () => context.go('/bmi-calculator'),
               ),
               _CalculatorCard(
                 title: 'ATLS Shock Classification',
                 icon: Icons.emergency_outlined,
-                description: 'Classify hemorrhagic shock using ATLS 10th Edition criteria with automatic parameter derivation',
+                description:
+                    'Classify hemorrhagic shock using ATLS 10th Edition criteria with automatic parameter derivation',
                 onTap: () => context.go('/atls-shock-classification'),
               ),
               _CalculatorCard(

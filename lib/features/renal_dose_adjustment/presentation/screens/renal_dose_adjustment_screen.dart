@@ -19,8 +19,6 @@ class _RenalDoseAdjustmentScreenState
   late final TextEditingController _ageController;
   late final TextEditingController _weightController;
   late final TextEditingController _creatinineController;
-  late final TextEditingController _standardDoseController;
-  late final TextEditingController _standardIntervalController;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,8 +27,6 @@ class _RenalDoseAdjustmentScreenState
     _ageController = TextEditingController();
     _weightController = TextEditingController();
     _creatinineController = TextEditingController();
-    _standardDoseController = TextEditingController();
-    _standardIntervalController = TextEditingController();
   }
 
   @override
@@ -38,8 +34,6 @@ class _RenalDoseAdjustmentScreenState
     _ageController.dispose();
     _weightController.dispose();
     _creatinineController.dispose();
-    _standardDoseController.dispose();
-    _standardIntervalController.dispose();
     super.dispose();
   }
 
@@ -59,16 +53,10 @@ class _RenalDoseAdjustmentScreenState
     if (_creatinineController.text != (formState.serumCreatinine ?? '')) {
       _creatinineController.text = formState.serumCreatinine ?? '';
     }
-    if (_standardDoseController.text != (formState.standardDose ?? '')) {
-      _standardDoseController.text = formState.standardDose ?? '';
-    }
-    if (_standardIntervalController.text != (formState.standardInterval ?? '')) {
-      _standardIntervalController.text = formState.standardInterval ?? '';
-    }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Renal Dose Adjustment'),
+        title: const Text('Creatinine Clearance'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/'),
@@ -82,12 +70,12 @@ class _RenalDoseAdjustmentScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Renal Dose Adjustment Calculator',
+                'Creatinine Clearance Calculator',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               Text(
-                'Calculate creatinine clearance and determine appropriate drug dose adjustments for renal impairment',
+                'Calculate creatinine clearance (CrCl) using the Cockcroft-Gault equation',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey[600],
                     ),
@@ -146,22 +134,6 @@ class _RenalDoseAdjustmentScreenState
                 hintText: 'App will convert to mg/dL automatically',
                 onChanged: (value) => formNotifier.setSerumCreatinine(value),
               ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                label: 'Standard Drug Dose',
-                unit: 'mg',
-                controller: _standardDoseController,
-                validator: validateStandardDose,
-                onChanged: (value) => formNotifier.setStandardDose(value),
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                label: 'Standard Dosing Interval',
-                unit: 'hours',
-                controller: _standardIntervalController,
-                validator: validateStandardInterval,
-                onChanged: (value) => formNotifier.setStandardInterval(value),
-              ),
               const SizedBox(height: 24),
               Container(
                 padding: const EdgeInsets.all(16),
@@ -192,7 +164,7 @@ class _RenalDoseAdjustmentScreenState
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'This calculator uses the Cockcroft-Gault equation to estimate creatinine clearance. Serum creatinine is automatically converted from μmol/L to mg/dL. Dose adjustments are general guidelines; always consult drug-specific dosing references.',
+                      'This calculator uses the Cockcroft-Gault equation to estimate creatinine clearance (CrCl). Serum creatinine is automatically converted from μmol/L to mg/dL. CrCl is used to assess renal function and guide drug dosing adjustments.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.blue.shade900,
                           ),

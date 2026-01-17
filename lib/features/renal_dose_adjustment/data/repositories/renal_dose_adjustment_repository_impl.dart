@@ -10,22 +10,18 @@ class RenalDoseAdjustmentRepositoryImpl {
   }) : _calculateRenalDoseAdjustment =
             calculateRenalDoseAdjustment ?? CalculateRenalDoseAdjustment();
 
-  /// Calculates renal dose adjustment
+  /// Calculates creatinine clearance
   RenalDoseAdjustmentResult calculate({
     required int age,
     required bool isMale,
     required double weightKg,
     required double serumCreatinineUmolPerL,
-    required double standardDose,
-    required double standardInterval,
   }) {
     return _calculateRenalDoseAdjustment.execute(
       age: age,
       isMale: isMale,
       weightKg: weightKg,
       serumCreatinineUmolPerL: serumCreatinineUmolPerL,
-      standardDose: standardDose,
-      standardInterval: standardInterval,
     );
   }
 }

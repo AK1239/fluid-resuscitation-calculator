@@ -33,6 +33,7 @@ import 'package:chemical_app/features/shock_index/presentation/screens/shock_ind
 import 'package:chemical_app/features/renal_dose_adjustment/presentation/screens/renal_dose_adjustment_screen.dart';
 import 'package:chemical_app/features/egfr_calculator/presentation/screens/egfr_calculator_screen.dart';
 import 'package:chemical_app/features/atls_shock_classification/presentation/screens/atls_shock_classification_screen.dart';
+import 'package:chemical_app/features/bmi_calculator/presentation/screens/bmi_calculator_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -166,6 +167,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/atls-shock-classification',
       builder: (context, state) => const AtlsShockClassificationScreen(),
+    ),
+    GoRoute(
+      path: '/bmi-calculator',
+      builder: (context, state) => const BmiCalculatorScreen(),
     ),
   ],
 );

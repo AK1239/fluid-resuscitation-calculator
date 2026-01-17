@@ -49,63 +49,17 @@ class CalculateRenalDoseAdjustment {
     }
   }
 
-  /// Gets dose adjustment guidance based on CrCl
-  String _getDoseAdjustmentGuidance(
-    double crCl,
-    double standardDose,
-    double? adjustedDose,
-    double standardInterval,
-    double? adjustedInterval,
-  ) {
-    if (crCl >= 90) {
-      return 'No dose adjustment needed. Standard dose appropriate.';
-    } else if (crCl < 10) {
-      return 'Severe kidney failure (CrCl < 10 mL/min). Consider dialysis-dependent dosing or alternative medications. Consult nephrology.';
-    } else if (adjustedDose != null && adjustedInterval != null) {
-      final dosePercent = ((adjustedDose / standardDose) * 100).toStringAsFixed(0);
-      return 'Renal impairment detected. Consider dose reduction to ${adjustedDose.toStringAsFixed(0)} mg (${dosePercent}% of standard) or extend interval to ${adjustedInterval.toStringAsFixed(1)} hours. Therapeutic drug monitoring recommended.';
-    } else if (adjustedInterval != null) {
-      return 'Renal impairment detected. Consider extending dosing interval to ${adjustedInterval.toStringAsFixed(1)} hours. Therapeutic drug monitoring recommended.';
-    } else {
-      return 'Renal impairment detected. Dose adjustment recommended based on CrCl. Consult drug-specific dosing guidelines.';
-    }
-  }
-
-  /// Calculates adjusted dose using proportional formula: Adjusted dose = Standard dose × (CrCl / 100)
-  double? _calculateAdjustedDose(double standardDose, double crCl) {
-    if (crCl >= 90) {
-      return null; // No adjustment needed for normal renal function
-    }
-    // Use proportional formula
-    final adjusted = standardDose * (crCl / 100);
-    return adjusted > 0 ? adjusted : null;
-  }
-
-  /// Calculates adjusted interval using proportional formula: Adjusted interval = Standard interval × (100 / CrCl)
-  double? _calculateAdjustedInterval(double standardInterval, double crCl) {
-    if (crCl >= 90) {
-      return null; // No adjustment needed for normal renal function
-    }
-    if (crCl <= 0) {
-      return null; // Cannot calculate if CrCl is 0 or negative
-    }
-    // Use proportional formula
-    final adjusted = standardInterval * (100 / crCl);
-    return adjusted > 0 ? adjusted : null;
-  }
-
   /// Executes the calculation
   RenalDoseAdjustmentResult execute({
     required int age,
     required bool isMale,
     required double weightKg,
     required double serumCreatinineUmolPerL,
-    required double standardDose,
-    required double standardInterval,
   }) {
     // Convert creatinine to mg/dL
-    final serumCreatinineMgPerDl =
-        _convertCreatinineToMgPerDl(serumCreatinineUmolPerL);
+    final serumCreatinineMgPerDl = _convertCreatinineToMgPerDl(
+      serumCreatinineUmolPerL,
+    );
 
     // Calculate CrCl
     final crCl = _calculateCreatinineClearance(
@@ -121,23 +75,8 @@ class CalculateRenalDoseAdjustment {
     // Determine renal function stage
     final stage = _determineRenalFunctionStage(roundedCrCl);
 
-    // Calculate adjusted dose using proportional formula
-    final adjustedDose = _calculateAdjustedDose(standardDose, roundedCrCl);
-
-    // Calculate adjusted interval using proportional formula
-    final adjustedInterval = _calculateAdjustedInterval(standardInterval, roundedCrCl);
-
     // Check if CrCl < 10 mL/min (requires dialysis consideration)
     final requiresDialysis = roundedCrCl < 10;
-
-    // Get dose adjustment guidance
-    final guidance = _getDoseAdjustmentGuidance(
-      roundedCrCl,
-      standardDose,
-      adjustedDose,
-      standardInterval,
-      adjustedInterval,
-    );
 
     return RenalDoseAdjustmentResult(
       age: age,
@@ -145,13 +84,8 @@ class CalculateRenalDoseAdjustment {
       weightKg: weightKg,
       serumCreatinine: serumCreatinineUmolPerL,
       serumCreatinineMgPerDl: serumCreatinineMgPerDl,
-      standardDose: standardDose,
-      standardInterval: standardInterval,
       creatinineClearance: roundedCrCl,
       renalFunctionStage: stage,
-      adjustedDose: adjustedDose,
-      adjustedInterval: adjustedInterval,
-      doseAdjustmentGuidance: guidance,
       requiresDialysis: requiresDialysis,
     );
   }

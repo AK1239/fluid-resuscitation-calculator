@@ -8,6 +8,22 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
 
   const RenalDoseAdjustmentResultWidget({super.key, required this.result});
 
+  String _getRenalFunctionInterpretation(double crCl) {
+    if (crCl >= 90) {
+      return 'Normal renal function. No dose adjustment typically needed.';
+    } else if (crCl >= 60) {
+      return 'Mild renal impairment. Monitor for drug accumulation. Consider dose adjustment based on drug-specific guidelines.';
+    } else if (crCl >= 30) {
+      return 'Moderate renal impairment. Dose adjustment recommended. Consult drug-specific dosing guidelines.';
+    } else if (crCl >= 15) {
+      return 'Severe renal impairment. Significant dose adjustment required. Consult drug-specific dosing guidelines and consider therapeutic drug monitoring.';
+    } else if (crCl >= 10) {
+      return 'Kidney failure. Consider dialysis-dependent dosing or alternative medications. Consult nephrology.';
+    } else {
+      return 'Severe kidney failure (CrCl < 10 mL/min). Consider dialysis-dependent dosing or alternative medications. Consult nephrology.';
+    }
+  }
+
   String _getRenalFunctionStageText() {
     switch (result.renalFunctionStage) {
       case RenalFunctionStage.normal:
@@ -93,46 +109,14 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
                       child: Text(
                         _getRenalFunctionStageText(),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: _getRenalFunctionColor(),
-                              fontWeight: FontWeight.w500,
-                            ),
+                          color: _getRenalFunctionColor(),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const Divider(),
-              ResultRow(
-                label: 'Standard Dose',
-                value: formatNumber(result.standardDose, decimals: 0),
-                unit: 'mg',
-                isHighlighted: false,
-              ),
-              const Divider(),
-              ResultRow(
-                label: 'Standard Interval',
-                value: formatNumber(result.standardInterval, decimals: 1),
-                unit: 'hours',
-                isHighlighted: false,
-              ),
-              if (result.adjustedDose != null) ...[
-                const Divider(),
-                ResultRow(
-                  label: 'Adjusted Dose',
-                  value: formatNumber(result.adjustedDose!, decimals: 0),
-                  unit: 'mg',
-                  isHighlighted: true,
-                ),
-              ],
-              if (result.adjustedInterval != null) ...[
-                const Divider(),
-                ResultRow(
-                  label: 'Adjusted Interval',
-                  value: formatNumber(result.adjustedInterval!, decimals: 1),
-                  unit: 'hours',
-                  isHighlighted: true,
-                ),
-              ],
             ],
           ),
         ),
@@ -143,10 +127,7 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.red.shade50,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.red.shade700,
-                width: 2,
-              ),
+              border: Border.all(color: Colors.red.shade700, width: 2),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +143,8 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'Critical Alert: CrCl < 10 mL/min',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.red.shade900,
                             ),
@@ -174,67 +156,65 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
                 Text(
                   'Severe kidney failure detected. Patient may require dialysis-dependent dosing or alternative medications. Consult nephrology before proceeding.',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.red.shade900,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    color: Colors.red.shade900,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
           ),
         ],
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: _getRenalFunctionColor().withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: _getRenalFunctionColor(),
-              width: isAbnormal ? 2 : 1,
+        if (isAbnormal) ...[
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: _getRenalFunctionColor().withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: _getRenalFunctionColor(), width: 2),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    _getRenalFunctionIcon(),
-                    color: _getRenalFunctionColor(),
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'Dose Adjustment Guidance',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: _getRenalFunctionColor(),
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                result.doseAdjustmentGuidance,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      _getRenalFunctionIcon(),
                       color: _getRenalFunctionColor(),
-                      fontWeight: FontWeight.w500,
+                      size: 24,
                     ),
-              ),
-              if (isAbnormal) ...[
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Renal Function Interpretation',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: _getRenalFunctionColor(),
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 8),
                 Text(
-                  'Note: This is a general guideline. Consult drug-specific dosing references and clinical guidelines for precise adjustments.',
+                  _getRenalFunctionInterpretation(result.creatinineClearance),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: _getRenalFunctionColor(),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Note: CrCl is used to assess renal function. Consult drug-specific dosing guidelines for dose adjustments based on CrCl.',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: _getRenalFunctionColor(),
-                      ),
+                    color: _getRenalFunctionColor(),
+                  ),
                 ),
               ],
-            ],
+            ),
           ),
-        ),
+        ],
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
@@ -257,9 +237,9 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
                   Text(
                     'Cockcroft-Gault Formula',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade900,
+                    ),
                   ),
                 ],
               ),
@@ -267,17 +247,17 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
               Text(
                 'CrCl = [(140 - age) × weight × (0.85 if female)] / (72 × SCr)',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.blue.shade900,
-                      fontFamily: 'monospace',
-                    ),
+                  color: Colors.blue.shade900,
+                  fontFamily: 'monospace',
+                ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Where:',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue.shade900,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue.shade900,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
@@ -285,9 +265,9 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
                 '• Age in years\n'
                 '• Weight in kg\n'
                 '• SCr = Serum Creatinine (mg/dL)',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.blue.shade900,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.blue.shade900),
               ),
             ],
           ),
@@ -310,11 +290,11 @@ class RenalDoseAdjustmentResultWidget extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'This tool is for clinical support only. Always consult drug-specific dosing guidelines and clinical judgment.',
+                  'This calculator provides an estimate of creatinine clearance. Clinical judgment and drug-specific dosing guidelines should be used for therapeutic decisions.',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey.shade700,
-                        fontStyle: FontStyle.italic,
-                      ),
+                    color: Colors.grey.shade700,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ),
             ],

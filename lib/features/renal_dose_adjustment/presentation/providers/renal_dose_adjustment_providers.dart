@@ -14,16 +14,12 @@ class RenalDoseAdjustmentFormState {
   final bool? isMale;
   final String? weightKg;
   final String? serumCreatinine;
-  final String? standardDose;
-  final String? standardInterval;
 
   const RenalDoseAdjustmentFormState({
     this.age,
     this.isMale,
     this.weightKg,
     this.serumCreatinine,
-    this.standardDose,
-    this.standardInterval,
   });
 
   RenalDoseAdjustmentFormState copyWith({
@@ -31,16 +27,12 @@ class RenalDoseAdjustmentFormState {
     bool? isMale,
     String? weightKg,
     String? serumCreatinine,
-    String? standardDose,
-    String? standardInterval,
   }) {
     return RenalDoseAdjustmentFormState(
       age: age ?? this.age,
       isMale: isMale ?? this.isMale,
       weightKg: weightKg ?? this.weightKg,
       serumCreatinine: serumCreatinine ?? this.serumCreatinine,
-      standardDose: standardDose ?? this.standardDose,
-      standardInterval: standardInterval ?? this.standardInterval,
     );
   }
 
@@ -51,21 +43,15 @@ class RenalDoseAdjustmentFormState {
         weightKg == null ||
         weightKg!.isEmpty ||
         serumCreatinine == null ||
-        serumCreatinine!.isEmpty ||
-        standardDose == null ||
-        standardDose!.isEmpty ||
-        standardInterval == null ||
-        standardInterval!.isEmpty) {
+        serumCreatinine!.isEmpty) {
       return false;
     }
 
     final ageValue = int.tryParse(age!);
     final weight = double.tryParse(weightKg!);
     final creatinine = double.tryParse(serumCreatinine!);
-    final dose = double.tryParse(standardDose!);
-    final interval = double.tryParse(standardInterval!);
 
-    if (ageValue == null || weight == null || creatinine == null || dose == null || interval == null) {
+    if (ageValue == null || weight == null || creatinine == null) {
       return false;
     }
 
@@ -77,12 +63,6 @@ class RenalDoseAdjustmentFormState {
       return false;
     }
     if (creatinine <= 0) {
-      return false;
-    }
-    if (dose <= 0) {
-      return false;
-    }
-    if (interval <= 0) {
       return false;
     }
 
@@ -111,14 +91,6 @@ class RenalDoseAdjustmentFormNotifier
     state = state.copyWith(serumCreatinine: serumCreatinine);
   }
 
-  void setStandardDose(String? standardDose) {
-    state = state.copyWith(standardDose: standardDose);
-  }
-
-  void setStandardInterval(String? standardInterval) {
-    state = state.copyWith(standardInterval: standardInterval);
-  }
-
   void reset() {
     state = const RenalDoseAdjustmentFormState();
   }
@@ -145,16 +117,12 @@ final renalDoseAdjustmentResultProvider =
     final isMale = formState.isMale!;
     final weightKg = double.parse(formState.weightKg!);
     final serumCreatinine = double.parse(formState.serumCreatinine!);
-    final standardDose = double.parse(formState.standardDose!);
-    final standardInterval = double.parse(formState.standardInterval!);
 
     return repository.calculate(
       age: age,
       isMale: isMale,
       weightKg: weightKg,
       serumCreatinineUmolPerL: serumCreatinine,
-      standardDose: standardDose,
-      standardInterval: standardInterval,
     );
   } catch (e) {
     return null;

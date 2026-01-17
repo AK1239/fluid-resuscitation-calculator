@@ -1,17 +1,12 @@
-/// Entity representing renal dose adjustment calculation result
+/// Entity representing creatinine clearance calculation result
 class RenalDoseAdjustmentResult {
   final int age;
   final bool isMale;
   final double weightKg;
   final double serumCreatinine; // in μmol/L
   final double serumCreatinineMgPerDl; // converted to mg/dL
-  final double standardDose;
-  final double standardInterval; // in hours
   final double creatinineClearance; // CrCl in mL/min
   final RenalFunctionStage renalFunctionStage;
-  final double? adjustedDose;
-  final double? adjustedInterval; // in hours
-  final String doseAdjustmentGuidance;
   final bool requiresDialysis;
 
   const RenalDoseAdjustmentResult({
@@ -20,13 +15,8 @@ class RenalDoseAdjustmentResult {
     required this.weightKg,
     required this.serumCreatinine,
     required this.serumCreatinineMgPerDl,
-    required this.standardDose,
-    required this.standardInterval,
     required this.creatinineClearance,
     required this.renalFunctionStage,
-    this.adjustedDose,
-    this.adjustedInterval,
-    required this.doseAdjustmentGuidance,
     required this.requiresDialysis,
   });
 }
