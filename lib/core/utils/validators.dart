@@ -524,3 +524,105 @@ String? validateCystatinC(String? value) {
   }
   return null;
 }
+
+/// Validates respiratory rate (breaths/min)
+String? validateRespiratoryRate(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Respiratory rate is required';
+  }
+  final rr = int.tryParse(value);
+  if (rr == null) {
+    return 'Please enter a valid number';
+  }
+  if (rr <= 0) {
+    return 'Respiratory rate must be greater than 0';
+  }
+  if (rr > 60) {
+    return 'Respiratory rate seems unrealistic (max 60/min)';
+  }
+  return null;
+}
+
+/// Validates urine volume in mL (optional)
+String? validateUrineVolumeOptional(String? value) {
+  if (value == null || value.isEmpty) {
+    return null; // Optional
+  }
+  final volume = double.tryParse(value);
+  if (volume == null) {
+    return 'Please enter a valid number';
+  }
+  if (volume < 0) {
+    return 'Volume cannot be negative';
+  }
+  if (volume > 10000) {
+    return 'Volume seems unrealistic (max 10000 mL)';
+  }
+  return null;
+}
+
+/// Validates time in hours (optional)
+String? validateTimeHoursOptional(String? value) {
+  if (value == null || value.isEmpty) {
+    return null; // Optional
+  }
+  final time = double.tryParse(value);
+  if (time == null) {
+    return 'Please enter a valid number';
+  }
+  if (time <= 0) {
+    return 'Time must be greater than 0';
+  }
+  if (time > 168) {
+    return 'Time seems unrealistic (max 168 hours)';
+  }
+  return null;
+}
+
+/// Validates base deficit in mmol/L (optional)
+String? validateBaseDeficit(String? value) {
+  if (value == null || value.isEmpty) {
+    return null; // Optional
+  }
+  final bd = double.tryParse(value);
+  if (bd == null) {
+    return 'Please enter a valid number';
+  }
+  if (bd < -20 || bd > 20) {
+    return 'Base deficit seems out of range (-20 to +20 mmol/L)';
+  }
+  return null;
+}
+
+/// Validates blood loss percentage (optional)
+String? validateBloodLossPercent(String? value) {
+  if (value == null || value.isEmpty) {
+    return null; // Optional
+  }
+  final percent = double.tryParse(value);
+  if (percent == null) {
+    return 'Please enter a valid number';
+  }
+  if (percent < 0 || percent > 100) {
+    return 'Blood loss must be between 0-100%';
+  }
+  return null;
+}
+
+/// Validates blood loss volume in mL (optional)
+String? validateBloodLossMl(String? value) {
+  if (value == null || value.isEmpty) {
+    return null; // Optional
+  }
+  final volume = double.tryParse(value);
+  if (volume == null) {
+    return 'Please enter a valid number';
+  }
+  if (volume < 0) {
+    return 'Blood loss cannot be negative';
+  }
+  if (volume > 10000) {
+    return 'Blood loss seems unrealistic (max 10000 mL)';
+  }
+  return null;
+}

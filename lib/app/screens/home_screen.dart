@@ -94,6 +94,12 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => context.go('/egfr-calculator'),
               ),
               _CalculatorCard(
+                title: 'ATLS Shock Classification',
+                icon: Icons.emergency_outlined,
+                description: 'Classify hemorrhagic shock using ATLS 10th Edition criteria with automatic parameter derivation',
+                onTap: () => context.go('/atls-shock-classification'),
+              ),
+              _CalculatorCard(
                 title: 'Obstetric Calculator',
                 icon: Icons.child_care,
                 description:
