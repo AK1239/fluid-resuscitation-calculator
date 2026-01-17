@@ -29,7 +29,11 @@ class CalculatorCategorySection extends StatelessWidget {
                 ? Theme.of(context).textTheme.headlineMedium
                 : Theme.of(context).textTheme.titleLarge,
           ),
-          if (category == 'Electrolyte Corrections' || category == 'Pediatrics')
+          if (category == 'Electrolyte Corrections' ||
+              category == 'Nephro' ||
+              category == 'Obgyn' ||
+              category == 'Emergency' ||
+              category == 'Pediatrics')
             const SizedBox(height: 16),
         ] else
           const SizedBox(height: 16),

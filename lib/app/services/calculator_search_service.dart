@@ -11,10 +11,12 @@ class CalculatorSearchService {
 
     final lowerQuery = query.toLowerCase();
     return calculators
-        .where((calc) =>
-            calc.title.toLowerCase().contains(lowerQuery) ||
-            calc.description.toLowerCase().contains(lowerQuery) ||
-            calc.category.toLowerCase().contains(lowerQuery))
+        .where(
+          (calc) =>
+              calc.title.toLowerCase().contains(lowerQuery) ||
+              calc.description.toLowerCase().contains(lowerQuery) ||
+              calc.category.toLowerCase().contains(lowerQuery),
+        )
         .toList();
   }
 
@@ -29,14 +31,21 @@ class CalculatorSearchService {
   }
 
   static List<String> sortCategories(List<String> categories) {
-    final order = ['General', 'Electrolyte Corrections', 'Pediatrics'];
+    final order = [
+      'General',
+      'Emergency',
+      'Electrolyte Corrections',
+      'Nephro',
+      'Obgyn',
+      'Pediatrics',
+    ];
     return categories..sort((a, b) {
-        final indexA = order.indexOf(a);
-        final indexB = order.indexOf(b);
-        if (indexA == -1 && indexB == -1) return a.compareTo(b);
-        if (indexA == -1) return 1;
-        if (indexB == -1) return -1;
-        return indexA.compareTo(indexB);
-      });
+      final indexA = order.indexOf(a);
+      final indexB = order.indexOf(b);
+      if (indexA == -1 && indexB == -1) return a.compareTo(b);
+      if (indexA == -1) return 1;
+      if (indexB == -1) return -1;
+      return indexA.compareTo(indexB);
+    });
   }
 }
