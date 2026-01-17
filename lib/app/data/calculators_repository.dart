@@ -179,5 +179,13 @@ class CalculatorsRepository {
       route: '/pediatric-vitals',
       category: 'Pediatrics',
     ),
+    CalculatorModel(
+      title: 'Premature Baby Fluid',
+      icon: Icons.child_care_outlined,
+      description:
+          'Calculate IV fluid and feeding requirements for neonates based on MNH Clinical Guidelines',
+      route: '/premature-baby-fluid',
+      category: 'Pediatrics',
+    ),
   ];
 }

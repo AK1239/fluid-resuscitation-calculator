@@ -36,6 +36,7 @@ import 'package:chemical_app/features/atls_shock_classification/presentation/scr
 import 'package:chemical_app/features/bmi_calculator/presentation/screens/bmi_calculator_screen.dart';
 import 'package:chemical_app/features/bishop_score/presentation/screens/bishop_score_screen.dart';
 import 'package:chemical_app/features/maintenance_calories/presentation/screens/maintenance_calories_screen.dart';
+import 'package:chemical_app/features/premature_baby_fluid/presentation/screens/premature_baby_fluid_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/splash',
@@ -181,6 +182,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/maintenance-calories',
       builder: (context, state) => const MaintenanceCaloriesScreen(),
+    ),
+    GoRoute(
+      path: '/premature-baby-fluid',
+      builder: (context, state) => const PrematureBabyFluidScreen(),
     ),
   ],
 );

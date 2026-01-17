@@ -71,9 +71,9 @@ class _MaintenanceCaloriesScreenState
               const SizedBox(height: 8),
               Text(
                 'Calculate daily caloric requirements and equivalent IV dextrose volumes',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[600],
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
               ),
               const SizedBox(height: 24),
               // Weight input
@@ -92,7 +92,7 @@ class _MaintenanceCaloriesScreenState
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<PatientCategory>(
-                value: formState.category,
+                initialValue: formState.category,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -117,17 +117,24 @@ class _MaintenanceCaloriesScreenState
                 const SizedBox(height: 8),
                 Text(
                   '${currentRange.minKcalPerKgPerDay.toStringAsFixed(0)} - ${currentRange.maxKcalPerKgPerDay.toStringAsFixed(0)} kcal/kg/day',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
                 ),
                 const SizedBox(height: 16),
                 Slider(
-                  value: formState.kcalPerKgPerDay ?? currentRange.midpointKcalPerKgPerDay,
+                  value:
+                      formState.kcalPerKgPerDay ??
+                      currentRange.midpointKcalPerKgPerDay,
                   min: currentRange.minKcalPerKgPerDay,
                   max: currentRange.maxKcalPerKgPerDay,
-                  divisions: ((currentRange.maxKcalPerKgPerDay - currentRange.minKcalPerKgPerDay) * 10).round(),
-                  label: '${(formState.kcalPerKgPerDay ?? currentRange.midpointKcalPerKgPerDay).toStringAsFixed(1)} kcal/kg/day',
+                  divisions:
+                      ((currentRange.maxKcalPerKgPerDay -
+                                  currentRange.minKcalPerKgPerDay) *
+                              10)
+                          .round(),
+                  label:
+                      '${(formState.kcalPerKgPerDay ?? currentRange.midpointKcalPerKgPerDay).toStringAsFixed(1)} kcal/kg/day',
                   onChanged: (value) {
                     formNotifier.setKcalPerKgPerDay(value);
                   },
@@ -137,18 +144,18 @@ class _MaintenanceCaloriesScreenState
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${currentRange.minKcalPerKgPerDay.toStringAsFixed(0)}',
+                      currentRange.minKcalPerKgPerDay.toStringAsFixed(0),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
                       'Selected: ${(formState.kcalPerKgPerDay ?? currentRange.midpointKcalPerKgPerDay).toStringAsFixed(1)} kcal/kg/day',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     Text(
-                      '${currentRange.maxKcalPerKgPerDay.toStringAsFixed(0)}',
+                      currentRange.maxKcalPerKgPerDay.toStringAsFixed(0),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
@@ -175,7 +182,8 @@ class _MaintenanceCaloriesScreenState
                         const SizedBox(width: 8),
                         Text(
                           'About This Calculator',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue.shade900,
                               ),
@@ -186,8 +194,8 @@ class _MaintenanceCaloriesScreenState
                     Text(
                       'This calculator determines daily maintenance caloric requirements based on patient condition and converts them to equivalent IV dextrose volumes. Note: Calculations are for caloric requirements only and do not include electrolyte or fluid needs.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.blue.shade900,
-                          ),
+                        color: Colors.blue.shade900,
+                      ),
                     ),
                   ],
                 ),

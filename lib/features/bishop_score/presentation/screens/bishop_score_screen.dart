@@ -46,7 +46,7 @@ class BishopScoreScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<CervicalDilation>(
-              value: formState.dilation,
+              initialValue: formState.dilation,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
